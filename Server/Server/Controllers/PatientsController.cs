@@ -12,12 +12,12 @@ namespace Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DoctorsController : ModelControllerBase<Doctor>
+    public class PatientsController : ModelControllerBase<Patient>
     {
-        public DoctorsController(IMongoDBSettings settings)
-            : base(new MongoService<Doctor>(settings, "Doctors"))
+        public PatientsController(IMongoDBSettings settings)
+            : base(new MongoService<Patient>(settings, "Patients"))
         {
-            
+
         }
     }
 }

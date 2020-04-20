@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Server.Models;
+using Server.Config;
 using MongoDB.Driver;
 using Common;
 
@@ -13,12 +13,12 @@ namespace Server.Services
     {
         protected readonly IMongoCollection<TModel> _collection;
 
-        public MongoService(IMongoDBSettings settings)
+        public MongoService(IMongoDBSettings settings, string modelName)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
-            _collection = database.GetCollection<TModel>(settings.DoctorsCollectionName);
+            _collection = database.GetCollection<TModel>(settings.CollectionsNames[modelName]);
         }
 
         public List<TModel> GetAll()

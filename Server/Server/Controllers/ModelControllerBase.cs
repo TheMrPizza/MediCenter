@@ -25,7 +25,7 @@ namespace Server.Controllers
             return _service.GetAll();
         }
 
-        [HttpGet("{id:length(24)}", Name = "Get")]
+        [HttpGet("{id:length(24)}")]
         public virtual ActionResult<TModel> Get(string id)
         {
             TModel model = _service.Get(id);
@@ -41,7 +41,8 @@ namespace Server.Controllers
         public virtual ActionResult<TModel> Add(TModel model)
         {
             _service.Add(model);
-            return CreatedAtRoute("Get", new { id = model.Id.ToString() }, model);
+            return model;
+            //return CreatedAtRoute("Get", new { id = model.Id.ToString() }, model);
         }
 
         [HttpPut("{id:length(24)}")]

@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Server.Models;
+using Server.Config;
 using Server.Services;
 using Common;
 
@@ -34,7 +34,7 @@ namespace Server
             services.AddSingleton<IMongoDBSettings>(sp =>
                 sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
-            services.AddSingleton<MongoService<Doctor>>();
+            //services.AddSingleton<MongoService<Doctor>>();
             services.AddControllers();
         }
 
