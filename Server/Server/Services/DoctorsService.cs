@@ -17,7 +17,6 @@ namespace Server.Services
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
-            database.GetCollection<Doctor>("Doctors");
             _doctors = database.GetCollection<Doctor>(settings.DoctorsCollectionName);
         }
 
