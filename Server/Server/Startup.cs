@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Server.Models;
+using Server.Services;
 
 namespace Server
 {
@@ -32,6 +33,7 @@ namespace Server
             services.AddSingleton<IMongoDBSettings>(sp =>
                 sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
+            services.AddSingleton<DoctorsService>();
             services.AddControllers();
         }
 

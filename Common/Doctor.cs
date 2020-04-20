@@ -8,7 +8,7 @@ namespace Common
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string ObjectId { get; set; }
+        public string Id { get; set; }
 
         [BsonElement("Name")]
         public string Name { get; set; }
@@ -19,9 +19,9 @@ namespace Common
         [BsonElement("Address")]
         public string Address { get; set; }
 
-        public Doctor(string objectId, string name, DateTime birthday, string address)
+        public Doctor(string id, string name, DateTime birthday, string address)
         {
-            ObjectId = objectId;
+            Id = id;
             Name = name;
             Birthday = birthday;
             Address = address;

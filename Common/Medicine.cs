@@ -2,12 +2,12 @@
 {
     public class Medicine
     {
-        public string ObjectId { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
 
-        public Medicine(string objectId, string name)
+        public Medicine(string id, string name)
         {
-            ObjectId = objectId;
+            Id = id;
             Name = name;
         }
     }

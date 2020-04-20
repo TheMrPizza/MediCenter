@@ -4,14 +4,14 @@ namespace Common
 {
     public class Patient : IPerson
     {
-        public string ObjectId { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public DateTime Birthday { get; set; }
         public string Address { get; set; }
 
-        public Patient(string objectId, string name, DateTime birthday, string address)
+        public Patient(string id, string name, DateTime birthday, string address)
         {
-            ObjectId = objectId;
+            Id = id;
             Name = name;
             Birthday = birthday;
             Address = address;
