@@ -22,18 +22,19 @@ namespace Server.Services
             _patients = database.GetCollection<Patient>(settings.CollectionsNames["Patients"]);
         }
 
-        //public bool RegisterDoctor(Doctor doctor)
-        //{
-        //    if (_doctors.Find(doc => doc.GetId() == doctor.GetId()).CountDocuments() == 0)
-        //    {
-        //        _doctors.InsertOne(doctor);
-        //        return true;
-        //    }
+        public Doctor SignInDoctor(string username, string password)
+        {
+            return _doctors.Find(doctor => doctor.Username == username
+                                 && doctor.Password == password).FirstOrDefault();
+        }
 
-        //    return false;
-        //}
+        public Patient SignInPatient(string username, string password)
+        {
+            return _patients.Find(patient => patient.Username == username
+                                  && patient.Password == password).FirstOrDefault();
+        }
 
-        public bool RegisterDoctor(Doctor doctor)
+        public bool Register(Doctor doctor)
         {
             try
             {
@@ -46,7 +47,7 @@ namespace Server.Services
             }
         }
 
-        public bool RegisterPatient(Patient patient)
+        public bool Register(Patient patient)
         {
             try
             {
