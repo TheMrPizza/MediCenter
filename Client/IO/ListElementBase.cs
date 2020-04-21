@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using Client.Exceptions;
 
 namespace Client.IO
 {
@@ -18,7 +17,7 @@ namespace Client.IO
                 {
                     return Execute();
                 }
-                catch (FormatException e)
+                catch (MediCenterException e)
                 {
                     PrintException(e);
                 }
@@ -29,13 +28,12 @@ namespace Client.IO
         {
             PrintOptions();
             ReadInput();
-            ValidateInput();
-            return _input;
+            return ValidateInput();
         }
 
         protected abstract void PrintOptions();
+        protected abstract string ValidateInput();
         protected abstract string ReadInput();
-        protected abstract bool ValidateInput();
-        protected abstract void PrintException(Exception exception);
+        protected abstract void PrintException(MediCenterException exception);
     }
 }
