@@ -9,10 +9,11 @@
         {
             _fieldName = fieldName;
             PrintFieldName();
-            return ReadInput();
+            ReadInput();
+            return _input;
         }
 
         protected abstract void PrintFieldName();
-        protected abstract string ReadInput();
+        protected abstract void ReadInput();
     }
 }

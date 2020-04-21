@@ -10,9 +10,9 @@ namespace Client.IO.ConsoleIO
             Console.Write(_fieldName + ": ");
         }
 
-        protected override string ReadInput()
+        protected override void ReadInput()
         {
-            return Console.ReadLine();
+            _input = Console.ReadLine();
         }
     }
 }

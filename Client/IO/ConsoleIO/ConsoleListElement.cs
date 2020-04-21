@@ -30,9 +30,9 @@ namespace Client.IO.ConsoleIO
             return _options[inputNum - 1];
         }
 
-        protected override string ReadInput()
+        protected override void ReadInput()
         {
-            return Console.ReadLine();
+            _input = Console.ReadLine();
         }
 
         protected override void PrintException(MediCenterException exception)

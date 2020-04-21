@@ -41,7 +41,6 @@ namespace Server
             services.AddSingleton<IMongoDBSettings>(sp =>
                 sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
-            //services.AddSingleton<MongoService<Doctor>>();
             services.AddSingleton<UsersService>();
             services.AddControllers();
         }

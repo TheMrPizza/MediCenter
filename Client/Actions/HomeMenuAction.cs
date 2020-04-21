@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Client.HttpClients;
 using Client.IO.Abstract;
 
@@ -17,11 +18,11 @@ namespace Client.Actions
                 { "Register", new RegisterAction(client, streamIO) } };
         }
 
-        public override ActionBase Run()
+        public override Task<ActionBase> Run()
         {
             _streamIO.TextElement.Interact("Welcome to MediCenter!");
             string option = _streamIO.ListElement.Interact(new List<string>(_options.Keys));
-            return _options[option];
+            return Task.FromResult(_options[option]);
         }
     }
 }

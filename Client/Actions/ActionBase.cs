@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Client.HttpClients;
 using Client.IO.Abstract;
 
@@ -17,6 +18,6 @@ namespace Client.Actions
             _streamIO = streamIO;
         }
 
-        public abstract ActionBase Run();
+        public abstract Task<ActionBase> Run();
     }
 }

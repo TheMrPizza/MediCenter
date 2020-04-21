@@ -13,7 +13,8 @@ namespace Client.HttpClients
 {
     public class MediClient
     {
-        public static HttpClient HttpClient = new HttpClient();
+        public IPerson User { get; set; }
+        private static HttpClient _httpClient = new HttpClient();
 
         public MediClient()
         {
@@ -22,7 +23,7 @@ namespace Client.HttpClients
 
         public async Task<IPerson> SignInAsync(string username, string password)
         {
-            HttpResponseMessage response = await HttpClient.GetAsync(
+            HttpResponseMessage response = await _httpClient.GetAsync(
                 "/users?username=" + username + "&password=" + password);
             if (response.IsSuccessStatusCode)
             {
@@ -34,15 +35,15 @@ namespace Client.HttpClients
 
         public async Task<bool> RegisterAsync(IPerson person, string type)
         {
-            HttpResponseMessage response = await HttpClient.PostAsync("/users/" + type, Write(person));
+            HttpResponseMessage response = await _httpClient.PostAsync("/users/" + type, Write(person));
             return response.IsSuccessStatusCode;
         }
 
         private void ConfigAsync()
         {
-            HttpClient.BaseAddress = new Uri("http://localhost");
-            HttpClient.DefaultRequestHeaders.Accept.Clear();
-            HttpClient.DefaultRequestHeaders.Accept.Add(
+            _httpClient.BaseAddress = new Uri("http://localhost:1943");
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 

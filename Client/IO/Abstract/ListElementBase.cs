@@ -33,7 +33,7 @@ namespace Client.IO.Abstract
 
         protected abstract void PrintOptions();
         protected abstract string ValidateInput();
-        protected abstract string ReadInput();
+        protected abstract void ReadInput();
         protected abstract void PrintException(MediCenterException exception);
     }
 }
