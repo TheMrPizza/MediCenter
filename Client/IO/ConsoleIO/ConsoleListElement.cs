@@ -1,7 +1,8 @@
 ﻿using System;
+using Client.IO.Abstract;
 using Client.Exceptions;
 
-namespace Client.IO
+namespace Client.IO.ConsoleIO
 {
     public class ConsoleListElement : ListElementBase
     {

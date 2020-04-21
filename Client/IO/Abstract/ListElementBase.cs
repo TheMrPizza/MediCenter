@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Client.Exceptions;
 
-namespace Client.IO
+namespace Client.IO.Abstract
 {
     public abstract class ListElementBase
     {

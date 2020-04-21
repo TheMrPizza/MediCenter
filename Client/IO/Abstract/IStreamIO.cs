@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Client.IO
+namespace Client.IO.Abstract
 {
-    interface IStreamIO
+    public interface IStreamIO
     {
     }
 }
