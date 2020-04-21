@@ -6,7 +6,6 @@ namespace Common
 {
     public class Doctor : IPerson
     {
-        //[BsonRepresentation(BsonType.ObjectId)]
         [BsonId]
         public string Username { get; set; }
 
