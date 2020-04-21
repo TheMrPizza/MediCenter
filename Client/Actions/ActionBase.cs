@@ -17,6 +17,6 @@ namespace Client.Actions
             _streamIO = streamIO;
         }
 
-        public abstract void Run();
+        public abstract ActionBase Run();
     }
 }
