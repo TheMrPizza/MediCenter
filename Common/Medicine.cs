@@ -10,5 +10,10 @@
             Id = id;
             Name = name;
         }
+
+        public string GetId()
+        {
+            return Id;
+        }
     }
 }

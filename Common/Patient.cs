@@ -8,7 +8,10 @@ namespace Common
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string Username { get; set; }
+
+        [BsonElement("Password")]
+        public string Password { get; set; }
 
         [BsonElement("Name")]
         public string Name { get; set; }
@@ -19,12 +22,18 @@ namespace Common
         [BsonElement("Address")]
         public string Address { get; set; }
 
-        public Patient(string id, string name, DateTime birthday, string address)
+        public Patient(string username, string password, string name, DateTime birthday, string address)
         {
-            Id = id;
+            Username = username;
+            Password = password;
             Name = name;
             Birthday = birthday;
             Address = address;
+        }
+
+        public string GetId()
+        {
+            return Username;
         }
     }
 }

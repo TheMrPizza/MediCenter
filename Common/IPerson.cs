@@ -4,8 +4,10 @@ namespace Common
 {
     public interface IPerson : IModel
     {
-        public string Name { get; set; }
-        public DateTime Birthday { get; set; }
-        public string Address { get; set; }
+        string Username { get; set; }
+        string Password { get; set; }
+        string Name { get; set; }
+        DateTime Birthday { get; set; }
+        string Address { get; set; }
     }
 }

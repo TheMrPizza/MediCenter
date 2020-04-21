@@ -28,7 +28,7 @@ namespace Server.Services
 
         public TModel Get(string id)
         {
-            return _collection.Find(document => document.Id == id).FirstOrDefault();
+            return _collection.Find(document => document.GetId() == id).FirstOrDefault();
         }
 
         public TModel Add(TModel model)
@@ -39,17 +39,17 @@ namespace Server.Services
 
         public void Update(string id, TModel model)
         {
-            _collection.ReplaceOne(document => document.Id == id, model);
+            _collection.ReplaceOne(document => document.GetId() == id, model);
         }
 
         public void Remove(string id)
         {
-            _collection.DeleteOne(document => document.Id == id);
+            _collection.DeleteOne(document => document.GetId() == id);
         }
 
         public void Remove(TModel model)
         {
-            _collection.DeleteOne(document => document.Id == model.Id);
+            _collection.DeleteOne(document => document.GetId() == model.GetId());
         }
     }
 }
