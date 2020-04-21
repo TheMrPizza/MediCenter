@@ -17,11 +17,11 @@ namespace Client.MediCenter
             Action = new HomeMenuAction(client, streamIO);
         }
 
-        public async void Run()
+        public void Run()
         {
             while (true)
             {
-                Action = await Action.Run();
+                Action = Action.Run().Result;
             }
         }
     }

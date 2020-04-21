@@ -24,7 +24,7 @@ namespace Client.HttpClients
         public async Task<IPerson> SignInAsync(string username, string password)
         {
             HttpResponseMessage response = await _httpClient.GetAsync(
-                "/users?username=" + username + "&password=" + password);
+                "/users/" + username + "/" + password);
             if (response.IsSuccessStatusCode)
             {
                 return await ReadAsAsync<IPerson>(response);
@@ -41,7 +41,7 @@ namespace Client.HttpClients
 
         private void ConfigAsync()
         {
-            _httpClient.BaseAddress = new Uri("http://localhost:1943");
+            _httpClient.BaseAddress = new Uri("https://localhost:44354/api");
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));

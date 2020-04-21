@@ -8,7 +8,7 @@ namespace Client
 {
     class Program
     {
-        static async void Main(string[] args)
+        static void Main(string[] args)
         {
             var client = new MediClient();
             var consoleIO = new ConsoleIO();

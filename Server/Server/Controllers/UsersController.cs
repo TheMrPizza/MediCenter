@@ -21,7 +21,7 @@ namespace Server.Controllers
             _service = service;
         }
 
-        [HttpGet]
+        [HttpGet("{username}/{password}")]
         public ActionResult<IPerson> SignIn(string username, string password)
         {
             // Cannot convert from IPerson to ActionResult<IPerson>, so checking each one separately

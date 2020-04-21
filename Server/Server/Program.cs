@@ -20,7 +20,6 @@ namespace Server
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls("http://localhost:1943");
                     webBuilder.UseStartup<Startup>();
                 });
     }
