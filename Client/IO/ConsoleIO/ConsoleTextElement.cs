@@ -8,7 +8,6 @@ namespace Client.IO.ConsoleIO
         protected override void PrintText()
         {
             Console.WriteLine(_text);
-            Console.WriteLine();
         }
     }
 }

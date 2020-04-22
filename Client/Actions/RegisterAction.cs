@@ -19,6 +19,7 @@ namespace Client.Actions
 
         public async override Task<ActionBase> Run()
         {
+            _streamIO.TextElement.Interact("Register as...");
             string option = _streamIO.ListElement.Interact(new List<string>(_options.Keys));
             await _client.RegisterAsync(CreatePerson(option), _options[option]);
             return new HomeMenuAction(_client, _streamIO);

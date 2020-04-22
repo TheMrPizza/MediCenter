@@ -19,6 +19,7 @@ namespace Client.Actions
 
         public async override Task<ActionBase> Run()
         {
+            _streamIO.TextElement.Interact("Sign in as...");
             string option = _streamIO.ListElement.Interact(new List<string>(_options.Keys));
             string username = _streamIO.FieldTextElement.Interact("Username");
             string password = _streamIO.FieldTextElement.Interact("Password");

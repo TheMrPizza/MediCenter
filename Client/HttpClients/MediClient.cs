@@ -26,22 +26,36 @@ namespace Client.HttpClients
         public async Task<T> SignInAsync<T>(string username, string password, string type)
             where T: IPerson
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(
-                "users/" + type + "/" + username + "/" + password);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                return await Serializer.Deserialize<T>(response);
-            }
+                HttpResponseMessage response = await _httpClient.GetAsync(
+                    "users/" + type + "/" + username + "/" + password);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<T>(response);
+                }
 
-            throw new NotFoundException("Username or password is incorrect");
+                throw new NotFoundException("Username or password is incorrect");
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
         }
 
         public async Task<bool> RegisterAsync<T>(T person, string type)
             where T: IPerson
         {
-            HttpResponseMessage response = await _httpClient.PostAsync(
-                "users/" + type, Serializer.Serialize(person));
-            return response.IsSuccessStatusCode;
+            try
+            {
+                HttpResponseMessage response = await _httpClient.PostAsync(
+                    "users/" + type, Serializer.Serialize(person));
+                return response.IsSuccessStatusCode;
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
         }
 
         private void Config()
