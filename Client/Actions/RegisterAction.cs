@@ -21,11 +21,11 @@ namespace Client.Actions
         public async override Task<ActionBase> Run()
         {
             string option = _streamIO.ListElement.Interact(new List<string>(_options.Keys));
-            string name = _streamIO.FieldElement.Interact("Name");
-            DateTime birthday = DateTime.Parse(_streamIO.FieldElement.Interact("Birthday"));
-            string address = _streamIO.FieldElement.Interact("Address");
-            string username = _streamIO.FieldElement.Interact("Username");
-            string password = _streamIO.FieldElement.Interact("Password");
+            string name = _streamIO.FieldTextElement.Interact("Name");
+            DateTime birthday = _streamIO.FieldDateElement.Interact("Birthday");
+            string address = _streamIO.FieldTextElement.Interact("Address");
+            string username = _streamIO.FieldTextElement.Interact("Username");
+            string password = _streamIO.FieldTextElement.Interact("Password");
             await _client.RegisterAsync(new Doctor(username, password, name, birthday, address), _options[option]);
             return new HomeMenuAction(_client, _streamIO);
         }

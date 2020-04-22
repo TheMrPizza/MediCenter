@@ -1,17 +1,20 @@
 ﻿using Client.IO.Abstract;
+using System;
 
 namespace Client.IO.ConsoleIO
 {
     public class ConsoleIO : IStreamIO
     {
         public TextElementBase TextElement { get; }
-        public FieldElementBase FieldElement { get; }
+        public FieldElementBase<string> FieldTextElement { get; }
+        public FieldElementBase<DateTime> FieldDateElement { get; }
         public ListElementBase ListElement { get; }
 
         public ConsoleIO()
         {
             TextElement = new ConsoleTextElement();
-            FieldElement = new ConsoleFieldElement();
+            FieldTextElement = new ConsoleTextFieldElement();
+            FieldDateElement = new ConsoleDateFieldElement();
             ListElement = new ConsoleListElement();
         }
     }

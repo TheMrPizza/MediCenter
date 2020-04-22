@@ -15,8 +15,8 @@ namespace Client.Actions
 
         public async override Task<ActionBase> Run()
         {
-            string username = _streamIO.FieldElement.Interact("Username");
-            string password = _streamIO.FieldElement.Interact("Password");
+            string username = _streamIO.FieldTextElement.Interact("Username");
+            string password = _streamIO.FieldTextElement.Interact("Password");
             _client.User = await SignInAsync(username, password);
             return new MainMenuAction(_client, _streamIO);
         }
