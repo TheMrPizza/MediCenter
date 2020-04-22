@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Client.HttpClients;
 using Client.IO.Abstract;
@@ -9,19 +9,19 @@ namespace Client.Actions
 {
     public class RegisterAction : ActionBase
     {
-        private Dictionary<string, string> _options;
+        private OrderedDictionary _options;
 
         public RegisterAction(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
-            _options = new Dictionary<string, string> {
+            _options = new OrderedDictionary {
                 { "A doctor", "doctors" }, {"A patient", "patients" } };
         }
 
         public async override Task<ActionBase> Run()
         {
             _streamIO.TextElement.Interact("Register as...");
-            string option = _streamIO.ListElement.Interact(new List<string>(_options.Keys));
-            await _client.RegisterAsync(CreatePerson(option), _options[option]);
+            string type = _streamIO.ListElement.Interact(_options) as string;
+            await _client.RegisterAsync(CreatePerson(type), type);
             return new HomeMenuAction(_client, _streamIO);
         }
 
