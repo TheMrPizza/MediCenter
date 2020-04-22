@@ -15,20 +15,24 @@ namespace Server.Controllers
             _service = service;
         }
 
-        [HttpGet("{username}/{password}")]
-        public ActionResult<IPerson> SignIn(string username, string password)
+        [HttpGet("{type}/{username}/{password}")]
+        public ActionResult<IPerson> SignIn(string type, string username, string password)
         {
-            // Cannot convert from IPerson to ActionResult<IPerson>, so checking each one separately
-            Doctor doctor = _service.SignInDoctor(username, password);
-            if (doctor != null)
+            if (type == "doctors")
             {
-                return doctor;
+                Doctor doctor = _service.SignInDoctor(username, password);
+                if (doctor != null)
+                {
+                    return doctor;
+                }
             }
-
-            Patient patient = _service.SignInPatient(username, password);
-            if (patient != null)
+            else
             {
-                return patient;
+                Patient patient = _service.SignInPatient(username, password);
+                if (patient != null)
+                {
+                    return patient;
+                }
             }
 
             return NotFound();

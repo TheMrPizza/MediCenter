@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -21,11 +22,11 @@ namespace Client.HttpClients
             Config();
         }
 
-        public async Task<T> SignInAsync<T>(string username, string password)
+        public async Task<T> SignInAsync<T>(string username, string password, string type)
             where T: IPerson
         {
             HttpResponseMessage response = await _httpClient.GetAsync(
-                "users/" + username + "/" + password);
+                "users/" + type + "/" + username + "/" + password);
             if (response.IsSuccessStatusCode)
             {
                 return await Deserialize<T>(response);
@@ -52,7 +53,7 @@ namespace Client.HttpClients
         private HttpContent Serialize(object obj)
         {
             string content = JsonConvert.SerializeObject(obj);
-            return new StringContent(content);
+            return new StringContent(content, Encoding.UTF8, "application/json");
         }
 
         private async Task<T> Deserialize<T>(HttpResponseMessage response)
