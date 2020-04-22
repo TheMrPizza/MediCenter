@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Text;
-using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Client.Serializers;
 using Client.Exceptions;
 using Common;
 
@@ -14,10 +13,12 @@ namespace Client.HttpClients
     {
         private static HttpClient _httpClient = new HttpClient();
         public IPerson User { get; set; }
+        public ISerializer Serializer { get; }
         public IConfiguration Configuration { get; }
 
-        public MediClient(IConfiguration configuration)
+        public MediClient(ISerializer serializer, IConfiguration configuration)
         {
+            Serializer = serializer;
             Configuration = configuration;
             Config();
         }
@@ -29,7 +30,7 @@ namespace Client.HttpClients
                 "users/" + type + "/" + username + "/" + password);
             if (response.IsSuccessStatusCode)
             {
-                return await Deserialize<T>(response);
+                return await Serializer.Deserialize<T>(response);
             }
 
             throw new NotFoundException("Username or password is incorrect");
@@ -38,7 +39,8 @@ namespace Client.HttpClients
         public async Task<bool> RegisterAsync<T>(T person, string type)
             where T: IPerson
         {
-            HttpResponseMessage response = await _httpClient.PostAsync("users/" + type, Serialize(person));
+            HttpResponseMessage response = await _httpClient.PostAsync(
+                "users/" + type, Serializer.Serialize(person));
             return response.IsSuccessStatusCode;
         }
 
@@ -48,18 +50,6 @@ namespace Client.HttpClients
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
-        }
-
-        private HttpContent Serialize(object obj)
-        {
-            string content = JsonConvert.SerializeObject(obj);
-            return new StringContent(content, Encoding.UTF8, "application/json");
-        }
-
-        private async Task<T> Deserialize<T>(HttpResponseMessage response)
-        {
-            string json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(json);
         }
     }
 }
