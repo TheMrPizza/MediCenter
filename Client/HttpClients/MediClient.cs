@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Client.Exceptions;
 using Common;
 
@@ -13,25 +14,29 @@ namespace Client.HttpClients
     {
         private static HttpClient _httpClient = new HttpClient();
         public IPerson User { get; set; }
+        public IConfiguration Configuration { get; }
 
-        public MediClient()
+        public MediClient(IConfiguration configuration)
         {
+            Configuration = configuration;
             Config();
         }
 
-        public async Task<IPerson> SignInAsync(string username, string password)
+        public async Task<T> SignInAsync<T>(string username, string password)
+            where T: IPerson
         {
             HttpResponseMessage response = await _httpClient.GetAsync(
                 "users/" + username + "/" + password);
             if (response.IsSuccessStatusCode)
             {
-                return await ReadAsAsync<IPerson>(response);
+                return await ReadAsAsync<T>(response);
             }
 
             throw new NotFoundException("Username or password is incorrect");
         }
 
-        public async Task<bool> RegisterAsync(IPerson person, string type)
+        public async Task<bool> RegisterAsync<T>(T person, string type)
+            where T: IPerson
         {
             HttpResponseMessage response = await _httpClient.PostAsync("users/" + type, Write(person));
             return response.IsSuccessStatusCode;
@@ -39,7 +44,7 @@ namespace Client.HttpClients
 
         private void Config()
         {
-            _httpClient.BaseAddress = new Uri("https://localhost:44354/api/");
+            _httpClient.BaseAddress = new Uri(Configuration["ConnectionString"]);
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
