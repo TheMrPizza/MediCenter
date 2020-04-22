@@ -1,6 +1,5 @@
 ﻿using System;
-using System.IO;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -29,7 +28,7 @@ namespace Client.HttpClients
                 "users/" + username + "/" + password);
             if (response.IsSuccessStatusCode)
             {
-                return await ReadAsAsync<T>(response);
+                return await Deserialize<T>(response);
             }
 
             throw new NotFoundException("Username or password is incorrect");
@@ -38,7 +37,7 @@ namespace Client.HttpClients
         public async Task<bool> RegisterAsync<T>(T person, string type)
             where T: IPerson
         {
-            HttpResponseMessage response = await _httpClient.PostAsync("users/" + type, Write(person));
+            HttpResponseMessage response = await _httpClient.PostAsync("users/" + type, Serialize(person));
             return response.IsSuccessStatusCode;
         }
 
@@ -50,16 +49,16 @@ namespace Client.HttpClients
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        private HttpContent Write(object obj)
+        private HttpContent Serialize(object obj)
         {
-            string content = JsonSerializer.Serialize(obj);
+            string content = JsonConvert.SerializeObject(obj);
             return new StringContent(content);
         }
 
-        private async Task<T> ReadAsAsync<T>(HttpResponseMessage response)
+        private async Task<T> Deserialize<T>(HttpResponseMessage response)
         {
-            Stream stream = await response.Content.ReadAsStreamAsync();
-            return await JsonSerializer.DeserializeAsync<T>(stream);
+            string json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<T>(json);
         }
     }
 }

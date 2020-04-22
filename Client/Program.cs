@@ -1,11 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
 using Client.HttpClients;
 using Client.IO.ConsoleIO;
-using Client.MediCenter;
 
 namespace Client
 {

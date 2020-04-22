@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -13,13 +14,21 @@ namespace Common
         public string Password { get; set; }
 
         [BsonElement("Name")]
+        [JsonPropertyName("Name")]
         public string Name { get; set; }
 
         [BsonElement("Birthday")]
+        [JsonPropertyName("Birthday")]
         public DateTime Birthday { get; set; }
 
         [BsonElement("Address")]
+        [JsonPropertyName("Address")]
         public string Address { get; set; }
+
+        public Doctor()
+        {
+
+        }
 
         public Doctor(string username, string password, string name, DateTime birthday, string address)
         {

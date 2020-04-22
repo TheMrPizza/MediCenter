@@ -15,7 +15,7 @@ namespace Client.Actions
         public override Task<ActionBase> Run()
         {
             _streamIO.TextElement.Interact("Hello " + _client.User.Name + "!");
-            return null;
+            return Task.FromResult<ActionBase>(null);
         }
     }
 }
