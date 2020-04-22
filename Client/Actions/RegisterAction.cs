@@ -21,23 +21,35 @@ namespace Client.Actions
         {
             _streamIO.TextElement.Interact("Register as...");
             string type = _streamIO.ListElement.Interact(_options) as string;
-            await _client.RegisterAsync(CreatePerson(type), type);
+            if (type == "doctors")
+            {
+                await _client.RegisterAsync(RegisterDoctor(), type);
+            }
+            else
+            {
+                await _client.RegisterAsync(RegisterPatient(), type);
+            }
+            
             return new HomeMenuAction(_client, _streamIO);
         }
 
-        public IPerson CreatePerson(string option)
+        public Doctor RegisterDoctor()
         {
             string name = _streamIO.FieldTextElement.Interact("Name");
             DateTime birthday = _streamIO.FieldDateElement.Interact("Birthday");
             string address = _streamIO.FieldTextElement.Interact("Address");
             string username = _streamIO.FieldTextElement.Interact("Username");
             string password = _streamIO.FieldTextElement.Interact("Password");
+            return new Doctor(username, password, name, birthday, address);
+        }
 
-            if (option == "A doctor")
-            {
-                return new Doctor(username, password, name, birthday, address);
-            }
-
+        public Patient RegisterPatient()
+        {
+            string name = _streamIO.FieldTextElement.Interact("Name");
+            DateTime birthday = _streamIO.FieldDateElement.Interact("Birthday");
+            string address = _streamIO.FieldTextElement.Interact("Address");
+            string username = _streamIO.FieldTextElement.Interact("Username");
+            string password = _streamIO.FieldTextElement.Interact("Password");
             return new Patient(username, password, name, birthday, address);
         }
     }
