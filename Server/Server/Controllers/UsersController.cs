@@ -38,15 +38,13 @@ namespace Server.Controllers
             return NotFound();
         }
 
-        [HttpPost]
-        [Route("doctors")]
+        [HttpPost("doctors")]
         public ActionResult<bool> Register(Doctor doctor)
         {
             return _service.Register(doctor);
         }
 
-        [HttpPost]
-        [Route("patients")]
+        [HttpPost("patients")]
         public ActionResult<bool> Register(Patient patient)
         {
             return _service.Register(patient);

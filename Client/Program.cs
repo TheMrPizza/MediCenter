@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using Client.HttpClients;
 using Client.IO.ConsoleIO;
+using Client.Serializers;
 
 namespace Client
 {
@@ -11,7 +12,8 @@ namespace Client
         static void Main(string[] args)
         {
             IConfiguration config = CreateConfig();
-            var client = new MediClient(config);
+            ISerializer serializer = new JsonSerializer();
+            var client = new MediClient(serializer, config);
             var consoleIO = new ConsoleIO();
             var mediCenter = new MediCenter.MediCenter(client, consoleIO);
             mediCenter.Run();
