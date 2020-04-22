@@ -4,18 +4,19 @@ using System.Text.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Client.Exceptions;
 using Common;
 
 namespace Client.HttpClients
 {
     public class MediClient
     {
-        public IPerson User { get; set; }
         private static HttpClient _httpClient = new HttpClient();
+        public IPerson User { get; set; }
 
         public MediClient()
         {
-            ConfigAsync();
+            Config();
         }
 
         public async Task<IPerson> SignInAsync(string username, string password)
@@ -27,7 +28,7 @@ namespace Client.HttpClients
                 return await ReadAsAsync<IPerson>(response);
             }
 
-            return null;
+            throw new NotFoundException("Username or password is incorrect");
         }
 
         public async Task<bool> RegisterAsync(IPerson person, string type)
@@ -36,7 +37,7 @@ namespace Client.HttpClients
             return response.IsSuccessStatusCode;
         }
 
-        private void ConfigAsync()
+        private void Config()
         {
             _httpClient.BaseAddress = new Uri("https://localhost:44354/api/");
             _httpClient.DefaultRequestHeaders.Accept.Clear();

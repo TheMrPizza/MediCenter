@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Client.HttpClients;
 using Client.IO.Abstract;
@@ -16,7 +14,8 @@ namespace Client.Actions
 
         public override Task<ActionBase> Run()
         {
-            throw new NotImplementedException();
+            _streamIO.TextElement.Interact("Hello " + _client.User.Name + "!");
+            return null;
         }
     }
 }

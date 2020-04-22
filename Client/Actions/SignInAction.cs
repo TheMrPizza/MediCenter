@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Client.HttpClients;
 using Client.IO.Abstract;
+using Client.Exceptions;
 using Common;
 
 namespace Client.Actions
@@ -19,8 +17,26 @@ namespace Client.Actions
         {
             string username = _streamIO.FieldElement.Interact("Username");
             string password = _streamIO.FieldElement.Interact("Password");
-            _client.User = await _client.SignInAsync(username, password);
+            _client.User = await SignInAsync(username, password);
             return new MainMenuAction(_client, _streamIO);
+        }
+
+        private async Task<IPerson> SignInAsync(string username, string password)
+        {
+            try
+            {
+                return await _client.SignInAsync(username, password);
+            }
+            catch (NotFoundException e)
+            {
+                _streamIO.TextElement.Interact(e.Message);
+            }
+            catch (ConnectionException e)
+            {
+                _streamIO.TextElement.Interact(e.Message);
+            }
+
+            return null;
         }
     }
 }

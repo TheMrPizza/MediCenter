@@ -22,6 +22,10 @@ namespace Client.MediCenter
             while (true)
             {
                 Action = Action.Run().Result;
+                if (Action == null)
+                {
+                    break;
+                }
             }
         }
     }
