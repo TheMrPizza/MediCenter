@@ -1,6 +1,6 @@
 ﻿namespace Common
 {
-    public class Medicine : IModel
+    public class Medicine
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -9,11 +9,6 @@
         {
             Id = id;
             Name = name;
-        }
-
-        public string GetId()
-        {
-            return Id;
         }
     }
 }

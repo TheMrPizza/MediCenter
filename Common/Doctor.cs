@@ -29,10 +29,5 @@ namespace Common
             Birthday = birthday;
             Address = address;
         }
-
-        public string GetId()
-        {
-            return Username;
-        }
     }
 }
