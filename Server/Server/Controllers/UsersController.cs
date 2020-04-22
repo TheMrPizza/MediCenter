@@ -8,9 +8,9 @@ namespace Server.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly UsersService _service;
+        private readonly IDBService _service;
 
-        public UsersController(UsersService service)
+        public UsersController(IDBService service)
         {
             _service = service;
         }

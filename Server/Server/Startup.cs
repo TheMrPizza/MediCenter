@@ -38,10 +38,10 @@ namespace Server
 
             services.Configure<MongoDBSettings>(Configuration.GetSection(nameof(MongoDBSettings)));
 
-            services.AddSingleton<IMongoDBSettings>(sp =>
+            services.AddSingleton<IDBSettings>(sp =>
                 sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
-            services.AddSingleton<UsersService>();
+            services.AddScoped<IDBService, MongoDBService>();
             services.AddControllers();
         }
 

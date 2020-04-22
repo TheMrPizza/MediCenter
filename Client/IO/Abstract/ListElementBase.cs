@@ -17,7 +17,7 @@ namespace Client.IO.Abstract
                 {
                     return Execute();
                 }
-                catch (MediCenterException e)
+                catch (ParsingExcpetion e)
                 {
                     PrintException(e);
                 }

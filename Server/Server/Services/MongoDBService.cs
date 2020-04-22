@@ -5,12 +5,12 @@ using Common;
 
 namespace Server.Services
 {
-    public class UsersService
+    public class MongoDBService : IDBService
     {
         private readonly IMongoCollection<Doctor> _doctors;
         private readonly IMongoCollection<Patient> _patients;
 
-        public UsersService(IMongoDBSettings settings)
+        public MongoDBService(IDBSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
