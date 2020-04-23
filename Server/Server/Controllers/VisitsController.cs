@@ -30,12 +30,12 @@ namespace Server.Controllers
             }
 
             visit.Doctor = doctor;
-            if (_service.VisitsService.Schedule(visit))
+            if (!_service.VisitsService.Schedule(visit))
             {
-                return visit;
+                return NotFound();
             }
 
-            return NotFound();
+            return visit;
         }
     }
 }

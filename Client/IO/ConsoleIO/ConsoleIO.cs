@@ -1,5 +1,5 @@
-﻿using Client.IO.Abstract;
-using System;
+﻿using System;
+using Client.IO.Abstract;
 
 namespace Client.IO.ConsoleIO
 {
@@ -7,6 +7,7 @@ namespace Client.IO.ConsoleIO
     {
         public TextElementBase TextElement { get; }
         public FieldElementBase<string> FieldTextElement { get; }
+        public FieldElementBase<bool> FieldBooleanElement { get; }
         public FieldElementBase<DateTime> FieldDateElement { get; }
         public ListElementBase ListElement { get; }
 
@@ -14,6 +15,7 @@ namespace Client.IO.ConsoleIO
         {
             TextElement = new ConsoleTextElement();
             FieldTextElement = new ConsoleTextFieldElement();
+            FieldBooleanElement = new ConsoleBooleanFieldElement();
             FieldDateElement = new ConsoleDateFieldElement();
             ListElement = new ConsoleListElement();
         }
