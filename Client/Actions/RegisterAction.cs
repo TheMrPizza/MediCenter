@@ -35,11 +35,11 @@ namespace Client.Actions
 
         public Doctor RegisterDoctor()
         {
+            string username = _streamIO.FieldTextElement.Interact("Username");
+            string password = _streamIO.FieldTextElement.Interact("Password");
             string name = _streamIO.FieldTextElement.Interact("Name");
             DateTime birthday = _streamIO.FieldDateElement.Interact("Birthday");
             string address = _streamIO.FieldTextElement.Interact("Address");
-            string username = _streamIO.FieldTextElement.Interact("Username");
-            string password = _streamIO.FieldTextElement.Interact("Password");
             return new Doctor(username, password, name, birthday, address);
         }
 

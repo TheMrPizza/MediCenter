@@ -15,39 +15,40 @@ namespace Server.Controllers
             _service = service;
         }
 
-        [HttpGet("{type}/{username}/{password}")]
-        public ActionResult<IPerson> SignIn(string type, string username, string password)
+        [HttpGet("doctors/{username}/{password}")]
+        public ActionResult<Doctor> SignInDoctor(string username, string password)
         {
-            if (type == "doctors")
+            Doctor doctor = _service.DoctorsService.SignIn(username, password);
+            if (doctor == null)
             {
-                Doctor doctor = _service.SignInDoctor(username, password);
-                if (doctor != null)
-                {
-                    return doctor;
-                }
-            }
-            else
-            {
-                Patient patient = _service.SignInPatient(username, password);
-                if (patient != null)
-                {
-                    return patient;
-                }
+                return NotFound();
             }
 
-            return NotFound();
+            return doctor;
+        }
+
+        [HttpGet("patients/{username}/{password}")]
+        public ActionResult<Patient> SignInPatient(string username, string password)
+        {
+            Patient patient = _service.PatientsService.SignIn(username, password);
+            if (patient == null)
+            {
+                return NotFound();
+            }
+
+            return patient;
         }
 
         [HttpPost("doctors")]
         public ActionResult<bool> Register(Doctor doctor)
         {
-            return _service.Register(doctor);
+            return _service.DoctorsService.Register(doctor);
         }
 
         [HttpPost("patients")]
         public ActionResult<bool> Register(Patient patient)
         {
-            return _service.Register(patient);
+            return _service.PatientsService.Register(patient);
         }
     }
 }

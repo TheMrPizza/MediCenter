@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -8,7 +9,7 @@ namespace Common
     public class Doctor : IPerson
     {
         [BsonId]
-        public string Username { get; }
+        public string Username { get; set; }
 
         [BsonElement("Password")]
         public string Password { get; set; }

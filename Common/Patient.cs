@@ -8,7 +8,7 @@ namespace Common
     public class Patient : IPerson
     {
         [BsonId]
-        public string Username { get; }
+        public string Username { get; set; }
 
         [BsonElement("Password")]
         public string Password { get; set; }
