@@ -58,6 +58,25 @@ namespace Client.HttpClients
             }
         }
 
+        public async Task<Visit> ScheduleVisit(Visit visit)
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.PostAsync(
+                    "visits", Serializer.Serialize(visit));
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<Visit>(response);
+                }
+
+                throw new NotFoundException("Cannot find a doctor for the visit");
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
         private void Config()
         {
             _httpClient.BaseAddress = new Uri(Configuration["ConnectionString"]);

@@ -36,18 +36,20 @@ namespace Server.Services
             }
         }
 
+        /// <summary>
+        /// Returns a doctor who has the requested speciality, and his visits don't overlapp
+        /// the requested visit times
+        /// </summary>
         public Doctor FindDoctorForVisit(Visit visit)
         {
-            return _doctors.Find(
-                doc => doc.Specialities.Contains(visit.Speciality) &&
-                       doc.Visits.All(vis => !AreVisitsOverlapping(visit, vis)))
-                .FirstOrDefault();
-        }
 
-        private bool AreVisitsOverlapping(Visit visit1, Visit visit2)
-        {
-            return (visit1.StartTime > visit2.StartTime && visit1.StartTime < visit2.EndTime)
-                || (visit2.StartTime > visit1.StartTime && visit2.StartTime < visit1.EndTime);
+            return _doctors.AsQueryable().FirstOrDefault(doc =>
+                doc.Specialities.Contains(visit.Speciality) &&
+                !doc.Visits.Any(vis =>
+                    (vis.StartTime > visit.StartTime && vis.StartTime < visit.EndTime) ||
+                    (visit.StartTime > vis.StartTime && visit.StartTime < vis.EndTime)
+                )
+            );
         }
     }
 }

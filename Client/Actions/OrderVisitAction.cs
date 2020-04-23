@@ -17,14 +17,19 @@ namespace Client.Actions
             _options = Enum.GetNames(typeof(Speciality)).ToList();
         }
 
-        public override Task<ActionBase> Run()
+        public async override Task<ActionBase> Run()
         {
+            _streamIO.TextElement.Interact("Choose speciality:");
             string specialityName = _streamIO.ListElement.Interact(_options) as string;
-            Speciality speciality = Enum.Parse<Speciality>(specialityName);
             DateTime date = _streamIO.FieldDateElement.Interact("Date");
             DateTime startTime = _streamIO.FieldDateElement.Interact("Start Time");
             DateTime endTime = _streamIO.FieldDateElement.Interact("End Time");
-            return null;
+            Visit visit = CreateVisit(specialityName, date, startTime, endTime);
+            Visit scheduledVisit = await _client.ScheduleVisit(visit);
+            _streamIO.TextElement.Interact("A visit with Dr. " + scheduledVisit.Doctor.Name +
+                " has been scheduled for " + scheduledVisit.StartTime);
+
+            return await Task.FromResult<ActionBase>(null);
         }
 
         public Visit CreateVisit(string specialityName, DateTime date, DateTime startTime, DateTime endTime)
