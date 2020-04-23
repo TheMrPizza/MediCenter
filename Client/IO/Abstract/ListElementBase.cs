@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using Client.Exceptions;
@@ -34,6 +35,12 @@ namespace Client.IO.Abstract
                 options.Add(new ListOption(entry.Key as string, entry.Value));
             }
 
+            return Interact(options);
+        }
+
+        public object Interact(List<string> names)
+        {
+            var options = names.Select(name => new ListOption(name)).ToList();
             return Interact(options);
         }
 

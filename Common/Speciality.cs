@@ -1,6 +1,6 @@
 ﻿namespace Common
 {
-    public enum Specialities
+    public enum Speciality
     {
         Orthopedics,
         Ophthalmology,

@@ -20,13 +20,22 @@ namespace Common
         public List<Medicine> Medicines { get; set; }
 
         [BsonElement("Speciality")]
-        public Specialities Speciality { get; set; }
+        public Speciality Speciality { get; set; }
 
         [BsonElement("StartTime")]
         public DateTime StartTime { get; set; }
 
         [BsonElement("EndTime")]
         public DateTime EndTime { get; set; }
+
+        public Visit(Patient patient, Speciality speciality, DateTime startTime, DateTime endTime)
+        {
+            Patient = patient;
+            Medicines = new List<Medicine>();
+            Speciality = speciality;
+            StartTime = startTime;
+            EndTime = endTime;
+        }
 
         public Visit()
         {
