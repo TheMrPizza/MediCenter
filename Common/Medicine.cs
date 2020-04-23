@@ -1,14 +1,25 @@
-﻿namespace Common
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace Common
 {
     public class Medicine
     {
-        public string Id { get; set; }
+        [BsonId]
+        public string Id { get; }
+
+        [BsonElement("Name")]
         public string Name { get; set; }
 
         public Medicine(string id, string name)
         {
             Id = id;
             Name = name;
+        }
+
+        public Medicine()
+        {
+
         }
     }
 }

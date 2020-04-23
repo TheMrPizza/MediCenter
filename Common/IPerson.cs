@@ -4,7 +4,7 @@ namespace Common
 {
     public interface IPerson
     {
-        string Username { get; set; }
+        string Username { get; }
         string Password { get; set; }
         string Name { get; set; }
         DateTime Birthday { get; set; }
