@@ -6,5 +6,6 @@ namespace Server.Services
     {
         Doctor SignIn(string username, string password);
         bool Register(Doctor doctor);
+        Doctor FindDoctorForVisit(Visit visit);
     }
 }

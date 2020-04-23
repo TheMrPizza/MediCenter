@@ -35,5 +35,10 @@ namespace Server.Services
                 return false;
             }
         }
+
+        public Doctor FindDoctorForVisit(Visit visit)
+        {
+
+        }
     }
 }
