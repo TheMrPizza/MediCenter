@@ -1,4 +1,4 @@
-﻿namespace Server.Services
+﻿namespace Server.Services.Abstract
 {
     public interface IDBService
     {

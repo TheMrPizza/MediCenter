@@ -1,6 +1,6 @@
 ﻿using Common;
 
-namespace Server.Services
+namespace Server.Services.Abstract
 {
     public interface IDoctorsService
     {

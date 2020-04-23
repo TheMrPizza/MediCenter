@@ -1,8 +1,9 @@
 ﻿using MongoDB.Driver;
+using Server.Services.Abstract;
 using Server.Config;
 using Common;
 
-namespace Server.Services
+namespace Server.Services.MongoDB
 {
     public class MongoDBVisitsService : IVisitsService
     {

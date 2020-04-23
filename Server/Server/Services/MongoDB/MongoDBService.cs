@@ -1,6 +1,7 @@
-﻿using Server.Config;
+﻿using Server.Services.Abstract;
+using Server.Config;
 
-namespace Server.Services
+namespace Server.Services.MongoDB
 {
     public class MongoDBService : IDBService
     {
