@@ -4,5 +4,6 @@
     {
         IDoctorsService DoctorsService { get; }
         IPatientsService PatientsService { get; }
+        IVisitsService VisitsService { get; }
     }
 }

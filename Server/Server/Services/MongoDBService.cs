@@ -6,11 +6,13 @@ namespace Server.Services
     {
         public IDoctorsService DoctorsService { get; }
         public IPatientsService PatientsService { get; }
+        public IVisitsService VisitsService { get; }
 
         public MongoDBService(IDBSettings settings)
         {
             DoctorsService = new MongoDBDoctorsService(settings);
             PatientsService = new MongoDBPatientsService(settings);
+            VisitsService = new MongoDBVisitsService(settings);
         }
     }
 }

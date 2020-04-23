@@ -38,7 +38,16 @@ namespace Server.Services
 
         public Doctor FindDoctorForVisit(Visit visit)
         {
+            return _doctors.Find(
+                doc => doc.Specialities.Contains(visit.Speciality) &&
+                       doc.Visits.All(vis => !AreVisitsOverlapping(visit, vis)))
+                .FirstOrDefault();
+        }
 
+        private bool AreVisitsOverlapping(Visit visit1, Visit visit2)
+        {
+            return (visit1.StartTime > visit2.StartTime && visit1.StartTime < visit2.EndTime)
+                || (visit2.StartTime > visit1.StartTime && visit2.StartTime < visit1.EndTime);
         }
     }
 }
