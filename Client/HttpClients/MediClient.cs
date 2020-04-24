@@ -23,7 +23,7 @@ namespace Client.HttpClients
             Config();
         }
 
-        public async Task<T> SignInAsync<T>(string username, string password, string type)
+        public async Task<T> SignIn<T>(string username, string password, string type)
             where T: IPerson
         {
             try
@@ -43,7 +43,7 @@ namespace Client.HttpClients
             }
         }
 
-        public async Task<bool> RegisterAsync<T>(T person, string type)
+        public async Task<bool> Register<T>(T person, string type)
             where T: IPerson
         {
             try

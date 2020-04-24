@@ -26,7 +26,7 @@ namespace Client.Actions
         {
             try
             {
-                await _client.RegisterAsync(doctor, "doctors");
+                await _client.Register(doctor, "doctors");
             }
             catch (MediCenterException e)
             {

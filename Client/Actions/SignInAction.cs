@@ -43,10 +43,10 @@ namespace Client.Actions
             {
                 if (type == "doctors")
                 {
-                    return await _client.SignInAsync<Doctor>(username, password, type);
+                    return await _client.SignIn<Doctor>(username, password, type);
                 }
 
-                return await _client.SignInAsync<Patient>(username, password, type);
+                return await _client.SignIn<Patient>(username, password, type);
             }
             catch (MediCenterException e)
             {
