@@ -22,8 +22,8 @@ namespace Common
         [BsonElement("Address")]
         public string Address { get; set; }
 
-        [BsonElement("Visits")]
-        public List<Visit> Visits { get; set; }
+        [BsonElement("VisitsId")]
+        public List<string> VisitsId { get; set; }
 
         public Patient(string username, string password, string name, DateTime birthday, string address)
         {
@@ -32,7 +32,7 @@ namespace Common
             Name = name;
             Birthday = birthday;
             Address = address;
-            Visits = new List<Visit>();
+            VisitsId = new List<string>();
         }
 
         public Patient()
