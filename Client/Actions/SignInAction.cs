@@ -23,7 +23,12 @@ namespace Client.Actions
             string type = _streamIO.ListElement.Interact(_options) as string;
             string username = _streamIO.FieldTextElement.Interact("Username");
             string password = _streamIO.FieldTextElement.Interact("Password");
-            _client.User = await SignInAsync(username, password, type);
+            _client.User = await SignIn(username, password, type);
+            return GetNextAction();
+        }
+
+        private ActionBase GetNextAction()
+        {
             if (_client.User == null)
             {
                 return new HomeMenuAction(_client, _streamIO);
@@ -32,7 +37,7 @@ namespace Client.Actions
             return new MainMenuAction(_client, _streamIO);
         }
 
-        private async Task<IPerson> SignInAsync(string username, string password, string type)
+        private async Task<IPerson> SignIn(string username, string password, string type)
         {
             try
             {
@@ -43,16 +48,11 @@ namespace Client.Actions
 
                 return await _client.SignInAsync<Patient>(username, password, type);
             }
-            catch (NotFoundException e)
+            catch (MediCenterException e)
             {
                 _streamIO.TextElement.Interact(e.Message);
+                return null;
             }
-            catch (ConnectionException e)
-            {
-                _streamIO.TextElement.Interact(e.Message);
-            }
-
-            return null;
         }
     }
 }

@@ -19,17 +19,21 @@ namespace Client.Actions
 
         public async override Task<ActionBase> Run()
         {
+            Visit inputVisit = GetInput();
+            Visit scheduledVisit = await _client.ScheduleVisit(inputVisit);
+            _streamIO.TextElement.Interact("A visit with Dr. " + scheduledVisit.Doctor.Name +
+                                           " has been scheduled for " + scheduledVisit.StartTime);
+            return new MainMenuAction(_client, _streamIO);
+        }
+
+        public Visit GetInput()
+        {
             _streamIO.TextElement.Interact("Choose speciality:");
             string specialityName = _streamIO.ListElement.Interact(_options) as string;
             DateTime date = _streamIO.FieldDateElement.Interact("Date");
             DateTime startTime = _streamIO.FieldDateElement.Interact("Start Time");
             DateTime endTime = _streamIO.FieldDateElement.Interact("End Time");
-            Visit visit = CreateVisit(specialityName, date, startTime, endTime);
-            Visit scheduledVisit = await _client.ScheduleVisit(visit);
-            _streamIO.TextElement.Interact("A visit with Dr. " + scheduledVisit.Doctor.Name +
-                " has been scheduled for " + scheduledVisit.StartTime);
-
-            return await Task.FromResult<ActionBase>(null);
+            return CreateVisit(specialityName, date, startTime, endTime);
         }
 
         public Visit CreateVisit(string specialityName, DateTime date, DateTime startTime, DateTime endTime)

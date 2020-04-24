@@ -12,7 +12,7 @@ namespace Client.Actions
         public MainMenuAction(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
             _options = new OrderedDictionary {
-                { "Order visit",  new OrderVisitAction(client, streamIO) } };
+                { "Order a visit",  new OrderVisitAction(client, streamIO) } };
         }
 
         public override Task<ActionBase> Run()
