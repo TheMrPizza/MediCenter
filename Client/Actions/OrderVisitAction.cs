@@ -33,6 +33,7 @@ namespace Client.Actions
             DateTime date = _streamIO.FieldDateElement.Interact("Date");
             DateTime startTime = _streamIO.FieldDateElement.Interact("Start Time");
             DateTime endTime = _streamIO.FieldDateElement.Interact("End Time");
+
             return CreateVisit(specialityName, date, startTime, endTime);
         }
 
@@ -42,6 +43,7 @@ namespace Client.Actions
             Speciality speciality = Enum.Parse<Speciality>(specialityName);
             startTime = date.Date.Add(startTime.TimeOfDay);
             endTime = date.Date.Add(endTime.TimeOfDay);
+
             return new Visit(patient, speciality, startTime, endTime);
         }
     }

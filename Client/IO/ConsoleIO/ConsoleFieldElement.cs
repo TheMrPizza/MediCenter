@@ -18,7 +18,10 @@ namespace Client.IO.ConsoleIO
 
         protected override void PrintException(MediCenterException exception)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(exception.Message);
+            Console.WriteLine();
+            Console.ResetColor();
         }
     }
 }

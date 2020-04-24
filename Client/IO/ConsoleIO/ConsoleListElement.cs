@@ -12,6 +12,8 @@ namespace Client.IO.ConsoleIO
             {
                 Console.WriteLine("[" + (i + 1) + "] " + _options[i].Name);
             }
+
+            Console.WriteLine();
         }
 
         protected override object ValidateInput()
@@ -37,7 +39,10 @@ namespace Client.IO.ConsoleIO
 
         protected override void PrintException(MediCenterException exception)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(exception.Message);
+            Console.WriteLine();
+            Console.ResetColor();
         }
     }
 }

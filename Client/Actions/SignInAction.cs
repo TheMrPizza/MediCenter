@@ -50,7 +50,7 @@ namespace Client.Actions
             }
             catch (MediCenterException e)
             {
-                _streamIO.TextElement.Interact(e.Message);
+                _streamIO.ErrorElement.Interact(e);
                 return null;
             }
         }

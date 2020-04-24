@@ -10,6 +10,7 @@ namespace Client.IO.ConsoleIO
         public FieldElementBase<bool> FieldBooleanElement { get; }
         public FieldElementBase<DateTime> FieldDateElement { get; }
         public ListElementBase ListElement { get; }
+        public ErrorElementBase ErrorElement { get; }
 
         public ConsoleIO()
         {
@@ -18,6 +19,7 @@ namespace Client.IO.ConsoleIO
             FieldBooleanElement = new ConsoleBooleanFieldElement();
             FieldDateElement = new ConsoleDateFieldElement();
             ListElement = new ConsoleListElement();
+            ErrorElement = new ConsoleErrorElement();
         }
     }
 }
