@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Server.Services.Abstract;
@@ -31,6 +32,7 @@ namespace Server.Services.MongoDB
             try
             {
                 _doctors.InsertOne(doctor);
+                doctor = Get(doctor.Username);
                 return true;
             }
             catch (MongoWriteException)
@@ -47,23 +49,43 @@ namespace Server.Services.MongoDB
         {
             var a = _doctors.Aggregate().Match(doc => doc.Specialities.Contains(visit.Speciality))
                 .Lookup("Visits", "VisitsId", "Id", "Visits")
+                .Project(p => new { Username = p["_id"], Visits = p["Visits"] })
                 .ToList();
 
-            DoctorVisits dv = a.Select(document => BsonSerializer.Deserialize<DoctorVisits>(document))
+            DoctorVisits dv = a.Select(document => BsonSerializer.Deserialize<DoctorVisits>(document.ToBsonDocument()))
                 .FirstOrDefault(dv => !dv.Visits.Any(vis => AreVisitsOverlapping(vis, visit)));
 
-            return dv;
+            return Get(dv.Username);
         }
 
-        public bool AreVisitsOverlapping(Visit visit1, Visit visit2)
+        public bool ScheduleVisit(Doctor doctor, Visit visit)
+        {
+            try
+            {
+                var update = Builders<Doctor>.Update.Push(doc => doc.VisitsId, visit.Id);
+                Update(doctor.Username, update);
+                return true;
+            }
+            catch (MongoWriteException)
+            {
+                return false;
+            }
+        }
+
+        public Doctor Get(string username)
+        {
+            return _doctors.Find(doc => doc.Username == username).FirstOrDefault();
+        }
+
+        public void Update(string username, UpdateDefinition<Doctor> update)
+        {
+            _doctors.UpdateOne(doc => doc.Username == username, update);
+        }
+
+        private bool AreVisitsOverlapping(Visit visit1, Visit visit2)
         {
             return (visit1.StartTime > visit2.StartTime && visit1.StartTime < visit2.EndTime) ||
                    (visit2.StartTime > visit1.StartTime && visit2.StartTime < visit1.EndTime);
-        }
-
-        public class DoctorVisits : Doctor
-        {
-            public List<Visit> Visits { get; set; }
         }
     }
 }

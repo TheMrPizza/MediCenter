@@ -24,8 +24,11 @@ namespace Server.Controllers
                 return NotFound();
             }
 
-            visit.Doctor = doctor;
-            if (!_service.VisitsService.Schedule(visit))
+            visit.DoctorUsername = doctor.Username;
+            Patient patient = _service.PatientsService.Get(visit.PatientUsername);
+            if (!_service.VisitsService.Schedule(visit) ||
+                !_service.DoctorsService.ScheduleVisit(doctor, visit) ||
+                !_service.PatientsService.ScheduleVisit(patient, visit))
             {
                 return NotFound();
             }

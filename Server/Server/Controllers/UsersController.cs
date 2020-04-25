@@ -39,6 +39,18 @@ namespace Server.Controllers
             return patient;
         }
 
+        [HttpGet("doctors/{username}")]
+        public ActionResult<string> GetDoctorName(string username)
+        {
+            Doctor doctor = _service.DoctorsService.Get(username);
+            if (doctor == null)
+            {
+                return NotFound();
+            }
+
+            return doctor.Name;
+        }
+
         [HttpPost("doctors")]
         public ActionResult<bool> Register(Doctor doctor)
         {

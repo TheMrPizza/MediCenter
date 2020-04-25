@@ -36,5 +36,29 @@ namespace Server.Services.MongoDB
                 return false;
             }
         }
+
+        public bool ScheduleVisit(Patient patient, Visit visit)
+        {
+            try
+            {
+                var update = Builders<Patient>.Update.Push(patient => patient.VisitsId, visit.Id);
+                Update(patient.Username, update);
+                return true;
+            }
+            catch (MongoWriteException)
+            {
+                return false;
+            }
+        }
+
+        public Patient Get(string username)
+        {
+            return _patients.Find(patient => patient.Username == username).FirstOrDefault();
+        }
+
+        public void Update(string username, UpdateDefinition<Patient> update)
+        {
+            _patients.UpdateOne(patient => patient.Username == username, update);
+        }
     }
 }

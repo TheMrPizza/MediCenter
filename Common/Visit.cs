@@ -12,10 +12,10 @@ namespace Common
         public string Id { get; set; }
 
         [BsonElement("Patient")]
-        public Patient Patient { get; set; }
+        public string PatientUsername { get; set; }
 
         [BsonElement("Doctor")]
-        public Doctor Doctor { get; set; }
+        public string DoctorUsername { get; set; }
 
         [BsonElement("Medicines")]
         public List<Medicine> Medicines { get; set; }
@@ -29,9 +29,9 @@ namespace Common
         [BsonElement("EndTime")]
         public DateTime EndTime { get; set; }
 
-        public Visit(Patient patient, Speciality speciality, DateTime startTime, DateTime endTime)
+        public Visit(string patientUsername, Speciality speciality, DateTime startTime, DateTime endTime)
         {
-            Patient = patient;
+            PatientUsername = patientUsername;
             Medicines = new List<Medicine>();
             Speciality = speciality;
             StartTime = startTime;

@@ -77,6 +77,24 @@ namespace Client.HttpClients
             }
         }
 
+        public async Task<string> GetDoctorName(string username)
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync("users/doctors/" + username);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<string>(response);
+                }
+
+                throw new NotFoundException("Cannot find a doctor with the given username");
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
         private void Config()
         {
             _httpClient.BaseAddress = new Uri(Configuration["ConnectionString"]);

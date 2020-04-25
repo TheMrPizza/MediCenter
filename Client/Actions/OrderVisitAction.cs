@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.HttpClients;
 using Client.IO.Abstract;
+using Client.Exceptions;
 using Common;
 
 namespace Client.Actions
@@ -20,10 +21,28 @@ namespace Client.Actions
         public async override Task<ActionBase> Run()
         {
             Visit inputVisit = GetInput();
-            Visit scheduledVisit = await _client.ScheduleVisit(inputVisit);
-            _streamIO.TextElement.Interact("A visit with Dr. " + scheduledVisit.Doctor.Name +
-                                           " has been scheduled for " + scheduledVisit.StartTime);
+            Visit scheduledvisit = await ScheduleVisit(inputVisit);
+            if (scheduledvisit != null)
+            {
+                string doctorName = await _client.GetDoctorName(scheduledvisit.DoctorUsername);
+                _streamIO.TextElement.Interact("A visit with Dr. " + doctorName +
+                                               " has been scheduled for " + scheduledvisit.StartTime);
+            }
+
             return new MainMenuAction(_client, _streamIO);
+        }
+
+        public async Task<Visit> ScheduleVisit(Visit visit)
+        {
+            try
+            {
+                return await _client.ScheduleVisit(visit);
+            }
+            catch (NotFoundException e)
+            {
+                _streamIO.ErrorElement.Interact(e);
+                return null;
+            }
         }
 
         public Visit GetInput()
@@ -44,7 +63,7 @@ namespace Client.Actions
             startTime = date.Date.Add(startTime.TimeOfDay);
             endTime = date.Date.Add(endTime.TimeOfDay);
 
-            return new Visit(patient, speciality, startTime, endTime);
+            return new Visit(patient.Username, speciality, startTime, endTime);
         }
     }
 }
