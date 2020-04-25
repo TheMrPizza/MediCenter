@@ -8,7 +8,8 @@ namespace Common
     public class Visit
     {
         [BsonId]
-        public string Id { get; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
 
         [BsonElement("Patient")]
         public Patient Patient { get; set; }

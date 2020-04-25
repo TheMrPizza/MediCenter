@@ -17,6 +17,11 @@ namespace Server.Services.MongoDB
             _visits = database.GetCollection<Visit>(settings.CollectionsNames["Visits"]);
         }
 
+        public Visit GetVisit(string id)
+        {
+            return _visits.Find(visit => visit.Id == id).FirstOrDefault();
+        }
+
         public bool Schedule(Visit visit)
         {
             try

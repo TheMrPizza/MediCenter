@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using Server.Services.Abstract;
 using Server.Config;
@@ -43,14 +45,25 @@ namespace Server.Services.MongoDB
         /// </summary>
         public Doctor FindDoctorForVisit(Visit visit)
         {
+            var a = _doctors.Aggregate().Match(doc => doc.Specialities.Contains(visit.Speciality))
+                .Lookup("Visits", "VisitsId", "Id", "Visits")
+                .ToList();
 
-            return _doctors.AsQueryable().FirstOrDefault(doc =>
-                doc.Specialities.Contains(visit.Speciality) &&
-                !doc.Visits.Any(vis =>
-                    (vis.StartTime > visit.StartTime && vis.StartTime < visit.EndTime) ||
-                    (visit.StartTime > vis.StartTime && visit.StartTime < vis.EndTime)
-                )
-            );
+            DoctorVisits dv = a.Select(document => BsonSerializer.Deserialize<DoctorVisits>(document))
+                .FirstOrDefault(dv => !dv.Visits.Any(vis => AreVisitsOverlapping(vis, visit)));
+
+            return dv;
+        }
+
+        public bool AreVisitsOverlapping(Visit visit1, Visit visit2)
+        {
+            return (visit1.StartTime > visit2.StartTime && visit1.StartTime < visit2.EndTime) ||
+                   (visit2.StartTime > visit1.StartTime && visit2.StartTime < visit1.EndTime);
+        }
+
+        public class DoctorVisits : Doctor
+        {
+            public List<Visit> Visits { get; set; }
         }
     }
 }
