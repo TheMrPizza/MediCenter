@@ -23,7 +23,7 @@ namespace Common
         public string Address { get; set; }
 
         [BsonElement("VisitsId")]
-        public List<ObjectId> VisitsId { get; set; }
+        public List<string> VisitsId { get; set; }
 
         public Patient(string username, string password, string name, DateTime birthday, string address)
         {
@@ -32,7 +32,7 @@ namespace Common
             Name = name;
             Birthday = birthday;
             Address = address;
-            VisitsId = new List<ObjectId>();
+            VisitsId = new List<string>();
         }
 
         public Patient()

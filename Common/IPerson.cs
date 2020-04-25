@@ -11,6 +11,6 @@ namespace Common
         string Name { get; set; }
         DateTime Birthday { get; set; }
         string Address { get; set; }
-        List<ObjectId> VisitsId { get; set; }
+        List<string> VisitsId { get; set; }
     }
 }

@@ -42,7 +42,7 @@ namespace Server.Services.MongoDB
         {
             try
             {
-                var update = Builders<Patient>.Update.Push(patient => patient.VisitsId, ObjectId.Parse(visit.Id));
+                var update = Builders<Patient>.Update.Push(patient => patient.VisitsId, visit.Id);
                 Update(patient.Username, update);
                 return true;
             }

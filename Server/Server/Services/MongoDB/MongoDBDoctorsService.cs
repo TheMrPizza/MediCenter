@@ -48,11 +48,17 @@ namespace Server.Services.MongoDB
         {
             var a = _doctors.Aggregate().Match(doc => doc.Specialities.Contains(visit.Speciality))
                 .Lookup("Visits", "VisitsId", "_id", "Visits")
+                //.Lookup<BsonDocument>("Visits", (Doctor doc) => doc.Visi, (BsonDocument bd) => bd["_id"], "Visits")
                 .Project(p => new { Username = p["_id"], Visits = p["Visits"] })
                 .ToList();
 
             DoctorVisits dv = a.Select(document => BsonSerializer.Deserialize<DoctorVisits>(document.ToBsonDocument()))
                 .FirstOrDefault(dv => !dv.Visits.Any(vis => AreVisitsOverlapping(vis, visit)));
+
+            if (dv == null)
+            {
+                return null;
+            }
 
             return Get(dv.Username);
         }
@@ -61,7 +67,7 @@ namespace Server.Services.MongoDB
         {
             try
             {
-                var update = Builders<Doctor>.Update.Push(doc => doc.VisitsId, ObjectId.Parse(visit.Id));
+                var update = Builders<Doctor>.Update.Push(doc => doc.VisitsId, visit.Id);
                 Update(doctor.Username, update);
                 return true;
             }

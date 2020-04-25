@@ -8,7 +8,6 @@ namespace Common
     public class Visit
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
         [BsonElement("Patient")]
@@ -31,11 +30,12 @@ namespace Common
 
         public Visit(string patientUsername, Speciality speciality, DateTime startTime, DateTime endTime)
         {
+            Id = Guid.NewGuid().ToString();
             PatientUsername = patientUsername;
             Medicines = new List<Medicine>();
             Speciality = speciality;
-            StartTime = startTime;
-            EndTime = endTime;
+            StartTime = startTime.ToUniversalTime();
+            EndTime = endTime.ToUniversalTime();
         }
 
         public Visit()
