@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MongoDB.Bson;
 
 namespace Common
 {
@@ -10,6 +11,6 @@ namespace Common
         string Name { get; set; }
         DateTime Birthday { get; set; }
         string Address { get; set; }
-        List<string> VisitsId { get; set; }
+        List<ObjectId> VisitsId { get; set; }
     }
 }

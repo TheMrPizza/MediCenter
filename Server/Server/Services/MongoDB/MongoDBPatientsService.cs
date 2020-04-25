@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using MongoDB.Driver;
+using MongoDB.Bson;
 using Server.Services.Abstract;
 using Server.Config;
 using Common;
@@ -41,7 +42,7 @@ namespace Server.Services.MongoDB
         {
             try
             {
-                var update = Builders<Patient>.Update.Push(patient => patient.VisitsId, visit.Id);
+                var update = Builders<Patient>.Update.Push(patient => patient.VisitsId, ObjectId.Parse(visit.Id));
                 Update(patient.Username, update);
                 return true;
             }

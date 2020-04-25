@@ -26,7 +26,7 @@ namespace Common
         public List<Speciality> Specialities { get; set; }
 
         [BsonElement("VisitsId")]
-        public List<string> VisitsId { get; set; }
+        public List<ObjectId> VisitsId { get; set; }
 
         public Doctor(string username, string password, string name, DateTime birthday, string address,
                       List<Speciality> specialities)
@@ -37,7 +37,7 @@ namespace Common
             Birthday = birthday;
             Address = address;
             Specialities = specialities;
-            VisitsId = new List<string>();
+            VisitsId = new List<ObjectId>();
         }
 
         public Doctor()

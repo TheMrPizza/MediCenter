@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
@@ -48,7 +47,7 @@ namespace Server.Services.MongoDB
         public Doctor FindDoctorForVisit(Visit visit)
         {
             var a = _doctors.Aggregate().Match(doc => doc.Specialities.Contains(visit.Speciality))
-                .Lookup("Visits", "VisitsId", "Id", "Visits")
+                .Lookup("Visits", "VisitsId", "_id", "Visits")
                 .Project(p => new { Username = p["_id"], Visits = p["Visits"] })
                 .ToList();
 
@@ -62,7 +61,7 @@ namespace Server.Services.MongoDB
         {
             try
             {
-                var update = Builders<Doctor>.Update.Push(doc => doc.VisitsId, visit.Id);
+                var update = Builders<Doctor>.Update.Push(doc => doc.VisitsId, ObjectId.Parse(visit.Id));
                 Update(doctor.Username, update);
                 return true;
             }
