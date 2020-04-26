@@ -46,12 +46,12 @@ namespace Server.Services.MongoDB
         /// </summary>
         public Doctor FindDoctorForVisit(Visit visit)
         {
-            var doctorVisits = _doctors.Aggregate().Match(doc => doc.Specialities.Contains(visit.Speciality))
+            var visits = _doctors.Aggregate().Match(doc => doc.Specialities.Contains(visit.Speciality))
                 .Lookup("Visits", "VisitsId", "_id", "Visits")
                 .Project(p => new { Username = p["_id"], Visits = p["Visits"] })
                 .ToList();
 
-            DoctorVisits dv = doctorVisits.Select(document => BsonSerializer.Deserialize<DoctorVisits>(document.ToBsonDocument()))
+            DoctorVisits dv = visits.Select(document => BsonSerializer.Deserialize<DoctorVisits>(document.ToBsonDocument()))
                 .FirstOrDefault(dv => !dv.Visits.Any(vis => AreVisitsOverlapping(vis, visit)));
 
             if (dv == null)
@@ -80,11 +80,11 @@ namespace Server.Services.MongoDB
         {
             var visits = _doctors.Aggregate().Match(doc => doc.Username == username)
                 .Lookup("Visits", "VisitsId", "_id", "Visits")
-                .Project(p => new { Visits = p["Visits"] })
-                .ToList();
+                .Project(p => new { Username = p["_id"], Visits = p["Visits"] })
+                .FirstOrDefault();
 
-            return visits.Select(document => BsonSerializer.Deserialize<Visit>(document.ToBsonDocument()))
-                    .Take(5).ToList();
+            return BsonSerializer.Deserialize<DoctorVisits>(visits.ToBsonDocument())
+                .Visits.OrderBy(visit => visit.StartTime).Take(5).ToList();
         }
 
         public Doctor Get(string username)

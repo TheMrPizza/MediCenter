@@ -46,7 +46,7 @@ namespace Server.Controllers
             Doctor doctor = _service.DoctorsService.SignIn(username, password);
             if (doctor == null)
             {
-                return null;
+                return Unauthorized();
             }
 
             return _service.DoctorsService.GetDoctorVisits(username);

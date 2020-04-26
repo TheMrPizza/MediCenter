@@ -29,7 +29,7 @@ namespace Client.Actions
                                                " has been scheduled for " + scheduledvisit.StartTime);
             }
 
-            return new MainMenuAction(_client, _streamIO);
+            return new PatientMainMenuAction(_client, _streamIO);
         }
 
         public async Task<Visit> ScheduleVisit(Visit visit)

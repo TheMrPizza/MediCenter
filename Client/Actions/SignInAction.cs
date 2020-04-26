@@ -24,22 +24,7 @@ namespace Client.Actions
             string username = _streamIO.FieldTextElement.Interact("Username");
             string password = _streamIO.FieldTextElement.Interact("Password");
             _client.User = await SignIn(username, password, type);
-            return GetNextAction();
-        }
-
-        private ActionBase GetNextAction()
-        {
-            if (_client.User == null)
-            {
-                return new HomeMenuAction(_client, _streamIO);
-            }
-
-            if (_client.User is Doctor)
-            {
-                return new DoctorMainMenuAction(_client, _streamIO);
-            }
-
-            return new PatientMainMenuAction(_client, _streamIO);
+            return new MainMenuAction(_client, _streamIO);
         }
 
         private async Task<IPerson> SignIn(string username, string password, string type)

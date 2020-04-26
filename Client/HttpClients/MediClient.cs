@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -70,6 +71,26 @@ namespace Client.HttpClients
                 }
 
                 throw new NotFoundException("Cannot find a doctor for the visit");
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
+        public async Task<List<Visit>> GetVisits()
+        {
+            try
+            {
+                string type = User is Doctor ? "doctors" : "patients";
+                HttpResponseMessage response = await _httpClient.GetAsync(
+                    "users/" + type + "/" + User.Username + "/" + User.Password + "/visits");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<List<Visit>>(response);
+                }
+
+                throw new NotFoundException("Cannot find visits");
             }
             catch (HttpRequestException)
             {
