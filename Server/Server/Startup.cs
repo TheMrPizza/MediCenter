@@ -34,6 +34,9 @@ namespace Server
             services.AddSingleton<IDBSettings>(sp =>
                 sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
+            services.AddScoped<IDoctorsService, MongoDBDoctorsService>();
+            services.AddScoped<IPatientsService, MongoDBPatientsService>();
+            services.AddScoped<IVisitsService, MongoDBVisitsService>();
             services.AddScoped<IDBService, MongoDBService>();
             services.AddControllers();
         }

@@ -5,18 +5,21 @@ namespace Client.IO.ConsoleIO
 {
     public class ConsoleBooleanFieldElement : ConsoleFieldElement<bool>
     {
+        private const string TRUE_VALUE = "y";
+        private const string FALSE_VALUE = "n";
+
         protected override void PrintFieldName()
         {
-            Console.WriteLine(_fieldName + " (y/n): ");
+            Console.WriteLine($"{_fieldName} ({TRUE_VALUE}/{FALSE_VALUE}): ");
         }
         protected override bool ValidateInput()
         {
-            if (_input != "y" && _input != "n")
+            if (_input != TRUE_VALUE && _input != FALSE_VALUE)
             {
-                throw new ParsingExcpetion("Field is not 'y' or 'n'");
+                throw new ParsingExcpetion($"Field is not '{TRUE_VALUE}' or '{FALSE_VALUE}'");
             }
 
-            return _input == "y";
+            return _input == TRUE_VALUE;
         }
     }
 }

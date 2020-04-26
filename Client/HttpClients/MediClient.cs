@@ -133,7 +133,7 @@ namespace Client.HttpClients
 
         private void Config()
         {
-            _httpClient.BaseAddress = new Uri(Configuration["ConnectionString"]);
+            _httpClient.BaseAddress = new Uri(Configuration["ServerURL"]);
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
