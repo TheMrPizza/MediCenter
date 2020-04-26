@@ -18,6 +18,11 @@ namespace Server.Controllers
         [HttpPost]
         public ActionResult<Visit> Schedule(Visit visit)
         {
+            if (!_service.PatientsService.CheckNewVisit(visit))
+            {
+                return BadRequest();
+            }
+
             Doctor doctor = _service.DoctorsService.FindDoctorForVisit(visit);
             if (doctor == null)
             {

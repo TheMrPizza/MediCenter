@@ -32,7 +32,7 @@ namespace Client.Actions
             return new PatientMainMenuAction(_client, _streamIO);
         }
 
-        public async Task<Visit> ScheduleVisit(Visit visit)
+        private async Task<Visit> ScheduleVisit(Visit visit)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace Client.Actions
             }
         }
 
-        public Visit GetInput()
+        private Visit GetInput()
         {
             _streamIO.TextElement.Interact("Choose speciality:");
             string specialityName = _streamIO.ListElement.Interact(_options) as string;
@@ -56,7 +56,7 @@ namespace Client.Actions
             return CreateVisit(specialityName, date, startTime, endTime);
         }
 
-        public Visit CreateVisit(string specialityName, DateTime date, DateTime startTime, DateTime endTime)
+        private Visit CreateVisit(string specialityName, DateTime date, DateTime startTime, DateTime endTime)
         {
             Patient patient = _client.User as Patient;
             Speciality speciality = Enum.Parse<Speciality>(specialityName);

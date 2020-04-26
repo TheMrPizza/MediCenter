@@ -39,7 +39,8 @@ namespace Client.Actions
                     _streamIO.TextElement.Interact((i + 1) + ". A visit with Dr. " + doctorName);
                 }
 
-                _streamIO.TextElement.Interact("   From " + visits[i].StartTime + " to " + visits[i].EndTime);
+                _streamIO.TextElement.Interact("   From " + visits[i].StartTime.ToLocalTime() +
+                                               " to " + visits[i].EndTime.ToLocalTime());
             }
         }
 

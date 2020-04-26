@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Bson;
@@ -40,6 +41,17 @@ namespace Server.Services.MongoDB
             }
         }
 
+        public bool CheckNewVisit(Visit visit)
+        {
+            if (visit.StartTime > DateTime.Now)
+            {
+                List<Visit> allVisits = GetVisits(visit.PatientUsername);
+                return !allVisits.Any(vis => AreVisitsOverlapping(vis, visit));
+            }
+
+            return false;
+        }
+
         public bool ScheduleVisit(Patient patient, Visit visit)
         {
             try
@@ -73,6 +85,12 @@ namespace Server.Services.MongoDB
         public void Update(string username, UpdateDefinition<Patient> update)
         {
             _patients.UpdateOne(patient => patient.Username == username, update);
+        }
+
+        private bool AreVisitsOverlapping(Visit visit1, Visit visit2)
+        {
+            return (visit1.StartTime > visit2.StartTime && visit1.StartTime < visit2.EndTime) ||
+                   (visit2.StartTime > visit1.StartTime && visit2.StartTime < visit1.EndTime);
         }
     }
 }
