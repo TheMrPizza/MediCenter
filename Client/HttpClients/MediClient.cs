@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace Client.HttpClients
                     return await Serializer.Deserialize<T>(response);
                 }
 
-                throw new NotFoundException("Username or password is incorrect");
+                throw new RequestException("Username or password is incorrect");
             }
             catch (HttpRequestException)
             {
@@ -51,7 +52,17 @@ namespace Client.HttpClients
             {
                 HttpResponseMessage response = await _httpClient.PostAsync(
                     type, Serializer.Serialize(person));
-                return response.IsSuccessStatusCode;
+                if (response.IsSuccessStatusCode)
+                {
+                    if (!await Serializer.Deserialize<bool>(response))
+                    {
+                        throw new RequestException("Username already exists");
+                    }
+
+                    return true;
+                }
+
+                return false;
             }
             catch (HttpRequestException)
             {
@@ -69,8 +80,12 @@ namespace Client.HttpClients
                 {
                     return await Serializer.Deserialize<Visit>(response);
                 }
+                else if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    throw new RequestException("You have another visit at the requested time");
+                }
 
-                throw new NotFoundException("Cannot find a doctor for the visit");
+                throw new RequestException("Cannot find a doctor for the visit");
             }
             catch (HttpRequestException)
             {
@@ -90,7 +105,7 @@ namespace Client.HttpClients
                     return await Serializer.Deserialize<List<Visit>>(response);
                 }
 
-                throw new NotFoundException("Cannot find visits");
+                throw new RequestException("Cannot find visits");
             }
             catch (HttpRequestException)
             {
@@ -108,7 +123,7 @@ namespace Client.HttpClients
                     return await Serializer.Deserialize<string>(response);
                 }
 
-                throw new NotFoundException("Cannot find a doctor with the given username");
+                throw new RequestException("Cannot find a doctor with the given username");
             }
             catch (HttpRequestException)
             {

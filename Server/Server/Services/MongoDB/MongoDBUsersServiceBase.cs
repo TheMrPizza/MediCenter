@@ -32,6 +32,11 @@ namespace Server.Services.MongoDB
         {
             try
             {
+                if (IsExist(person.Username))
+                {
+                    return false;
+                }
+
                 _collection.InsertOne(person);
                 return true;
             }
@@ -80,6 +85,11 @@ namespace Server.Services.MongoDB
         {
             return (visit1.StartTime > visit2.StartTime && visit1.StartTime < visit2.EndTime) ||
                    (visit2.StartTime > visit1.StartTime && visit2.StartTime < visit1.EndTime);
+        }
+
+        protected bool IsExist(string username)
+        {
+            return _collection.Find(per => per.Username == username).CountDocuments() >= 1;
         }
     }
 }

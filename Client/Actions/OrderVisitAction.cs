@@ -38,7 +38,7 @@ namespace Client.Actions
             {
                 return await _client.ScheduleVisit(visit);
             }
-            catch (NotFoundException e)
+            catch (RequestException e)
             {
                 _streamIO.ErrorElement.Interact(e);
                 return null;

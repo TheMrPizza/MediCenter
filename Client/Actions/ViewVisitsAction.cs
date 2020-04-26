@@ -50,7 +50,7 @@ namespace Client.Actions
             {
                 return await _client.GetVisits();
             }
-            catch (MediCenterException e)
+            catch (RequestException e)
             {
                 _streamIO.ErrorElement.Interact(e);
                 return null;

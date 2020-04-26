@@ -24,6 +24,11 @@ namespace Client.Actions
             string username = _streamIO.FieldTextElement.Interact("Username");
             string password = _streamIO.FieldTextElement.Interact("Password");
             _client.User = await SignIn(username, password, type);
+            if (_client.User == null)
+            {
+                return new HomeMenuAction(_client, _streamIO);
+            }
+
             return new MainMenuAction(_client, _streamIO);
         }
 
@@ -38,7 +43,7 @@ namespace Client.Actions
 
                 return await _client.SignIn<Patient>(username, password, type);
             }
-            catch (MediCenterException e)
+            catch (RequestException e)
             {
                 _streamIO.ErrorElement.Interact(e);
                 return null;
