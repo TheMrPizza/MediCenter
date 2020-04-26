@@ -51,7 +51,7 @@ namespace Server.Services.MongoDB
                 .Project(p => new { Username = p["_id"], Visits = p["Visits"] })
                 .ToList();
 
-            DoctorVisits dv = visits.Select(document => BsonSerializer.Deserialize<DoctorVisits>(document.ToBsonDocument()))
+            PersonVisits dv = visits.Select(document => BsonSerializer.Deserialize<PersonVisits>(document.ToBsonDocument()))
                 .FirstOrDefault(dv => !dv.Visits.Any(vis => AreVisitsOverlapping(vis, visit)));
 
             if (dv == null)
@@ -76,14 +76,14 @@ namespace Server.Services.MongoDB
             }
         }
 
-        public List<Visit> GetDoctorVisits(string username)
+        public List<Visit> GetVisits(string username)
         {
             var visits = _doctors.Aggregate().Match(doc => doc.Username == username)
                 .Lookup("Visits", "VisitsId", "_id", "Visits")
                 .Project(p => new { Username = p["_id"], Visits = p["Visits"] })
                 .FirstOrDefault();
 
-            return BsonSerializer.Deserialize<DoctorVisits>(visits.ToBsonDocument())
+            return BsonSerializer.Deserialize<PersonVisits>(visits.ToBsonDocument())
                 .Visits.OrderBy(visit => visit.StartTime).Take(5).ToList();
         }
 

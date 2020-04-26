@@ -9,7 +9,7 @@ namespace Server.Services.Abstract
         bool Register(Doctor doctor);
         Doctor FindDoctorForVisit(Visit visit);
         bool ScheduleVisit(Doctor doctor, Visit visit);
-        List<Visit> GetDoctorVisits(string username);
+        List<Visit> GetVisits(string username);
         Doctor Get(string username);
     }
 }

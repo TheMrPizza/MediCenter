@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using Server.Services.Abstract;
 using Server.Config;
 using Common;
@@ -50,6 +52,17 @@ namespace Server.Services.MongoDB
             {
                 return false;
             }
+        }
+
+        public List<Visit> GetVisits(string username)
+        {
+            var visits = _patients.Aggregate().Match(doc => doc.Username == username)
+                .Lookup("Visits", "VisitsId", "_id", "Visits")
+                .Project(p => new { Username = p["_id"], Visits = p["Visits"] })
+                .FirstOrDefault();
+
+            return BsonSerializer.Deserialize<PersonVisits>(visits.ToBsonDocument())
+                .Visits.OrderBy(visit => visit.StartTime).Take(5).ToList();
         }
 
         public Patient Get(string username)

@@ -49,7 +49,19 @@ namespace Server.Controllers
                 return Unauthorized();
             }
 
-            return _service.DoctorsService.GetDoctorVisits(username);
+            return _service.DoctorsService.GetVisits(username);
+        }
+
+        [HttpGet("patients/{username}/{password}/visits")]
+        public ActionResult<List<Visit>> GetPatientVisits(string username, string password)
+        {
+            Patient patient = _service.PatientsService.SignIn(username, password);
+            if (patient == null)
+            {
+                return Unauthorized();
+            }
+
+            return _service.PatientsService.GetVisits(username);
         }
 
         [HttpGet("doctors/{username}")]
