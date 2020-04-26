@@ -36,18 +36,18 @@ namespace Client.Actions
         {
             for (int i = 0; i < visits.Count; i++)
             {
-                string doctorName = await GetName(visits[i].PatientUsername, "patients");
-                if (doctorName == null)
+                string patientName = await GetName(visits[i].PatientUsername, "patients");
+                if (patientName == null)
                 {
-                    _streamIO.TextElement.Interact((i + 1) + ". A visit with unknown patient");
+                    _streamIO.TextElement.Interact($"{(i + 1)}. A visit with unknown patient");
                 }
                 else
                 {
-                    _streamIO.TextElement.Interact((i + 1) + ". A visit with " + doctorName);
+                    _streamIO.TextElement.Interact($"{(i + 1)}. A visit with {patientName}");
                 }
 
-                _streamIO.TextElement.Interact("   From " + visits[i].StartTime.ToLocalTime() +
-                                               " to " + visits[i].EndTime.ToLocalTime());
+                _streamIO.TextElement.Interact($"   From {visits[i].StartTime.ToLocalTime()} " +
+                                               $"to {visits[i].EndTime.ToLocalTime()}");
             }
         }
 
@@ -55,18 +55,18 @@ namespace Client.Actions
         {
             for (int i = 0; i < visits.Count; i++)
             {
-                string patientName = await GetName(visits[i].DoctorUsername, "doctors");
-                if (patientName == null)
+                string doctorName = await GetName(visits[i].DoctorUsername, "doctors");
+                if (doctorName == null)
                 {
                     _streamIO.TextElement.Interact((i + 1) + ". A visit with unknown doctor");
                 }
                 else
                 {
-                    _streamIO.TextElement.Interact((i + 1) + ". A visit with Dr. " + patientName);
+                    _streamIO.TextElement.Interact($"{(i + 1)}. A visit with Dr. {doctorName}");
                 }
 
-                _streamIO.TextElement.Interact("   From " + visits[i].StartTime.ToLocalTime() +
-                                               " to " + visits[i].EndTime.ToLocalTime());
+                _streamIO.TextElement.Interact($"   From {visits[i].StartTime.ToLocalTime()} " +
+                                               $"to {visits[i].EndTime.ToLocalTime()}");
             }
         }
 

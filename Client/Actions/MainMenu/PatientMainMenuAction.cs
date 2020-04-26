@@ -18,7 +18,7 @@ namespace Client.Actions
 
         public override Task<ActionBase> Run()
         {
-            _streamIO.TextElement.Interact("Hello " + _client.User.Name + "!");
+            _streamIO.TextElement.Interact($"Hello {_client.User.Name}!");
             _streamIO.TextElement.Interact("What would you like to do?");
             ActionBase nextAction = _streamIO.ListElement.Interact(_options) as ActionBase;
             return Task.FromResult(nextAction);
