@@ -24,7 +24,7 @@ namespace Client.Actions
             Visit scheduledvisit = await ScheduleVisit(inputVisit);
             if (scheduledvisit != null)
             {
-                string doctorName = await _client.GetDoctorName(scheduledvisit.DoctorUsername);
+                string doctorName = await _client.GetName(scheduledvisit.DoctorUsername, "doctors");
                 _streamIO.TextElement.Interact("A visit with Dr. " + doctorName +
                                                " has been scheduled for " + scheduledvisit.StartTime);
             }

@@ -45,5 +45,17 @@ namespace Server.Controllers
 
             return _service.PatientsService.GetVisits(username);
         }
+
+        [HttpGet("{username}")]
+        public ActionResult<string> GetName(string username)
+        {
+            Patient patient = _service.PatientsService.Get(username);
+            if (patient == null)
+            {
+                return NotFound();
+            }
+
+            return patient.Name;
+        }
     }
 }

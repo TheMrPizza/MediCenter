@@ -113,17 +113,17 @@ namespace Client.HttpClients
             }
         }
 
-        public async Task<string> GetDoctorName(string username)
+        public async Task<string> GetName(string username, string type)
         {
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync("doctors/" + username);
+                HttpResponseMessage response = await _httpClient.GetAsync(type + "/" + username);
                 if (response.IsSuccessStatusCode)
                 {
                     return await Serializer.Deserialize<string>(response);
                 }
 
-                throw new RequestException("Cannot find a doctor with the given username");
+                throw new RequestException("Cannot find a user with the given username");
             }
             catch (HttpRequestException)
             {

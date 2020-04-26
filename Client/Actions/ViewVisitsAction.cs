@@ -19,24 +19,50 @@ namespace Client.Actions
             List<Visit> visits = await GetVisits();
             if (visits != null)
             {
-                await PrintVisits(visits);
+                if (_client.User is Doctor)
+                {
+                    await PrintDoctorVisits(visits);
+                }
+                else
+                {
+                    await PrintPatientVisits(visits);
+                }
             }
 
             return new MainMenuAction(_client, _streamIO);
         }
 
-        private async Task PrintVisits(List<Visit> visits)
+        private async Task PrintDoctorVisits(List<Visit> visits)
         {
             for (int i = 0; i < visits.Count; i++)
             {
-                string doctorName = await GetDoctorName(visits[i].DoctorUsername);
+                string doctorName = await GetName(visits[i].PatientUsername, "patients");
                 if (doctorName == null)
+                {
+                    _streamIO.TextElement.Interact((i + 1) + ". A visit with unknown patient");
+                }
+                else
+                {
+                    _streamIO.TextElement.Interact((i + 1) + ". A visit with " + doctorName);
+                }
+
+                _streamIO.TextElement.Interact("   From " + visits[i].StartTime.ToLocalTime() +
+                                               " to " + visits[i].EndTime.ToLocalTime());
+            }
+        }
+
+        private async Task PrintPatientVisits(List<Visit> visits)
+        {
+            for (int i = 0; i < visits.Count; i++)
+            {
+                string patientName = await GetName(visits[i].DoctorUsername, "doctors");
+                if (patientName == null)
                 {
                     _streamIO.TextElement.Interact((i + 1) + ". A visit with unknown doctor");
                 }
                 else
                 {
-                    _streamIO.TextElement.Interact((i + 1) + ". A visit with Dr. " + doctorName);
+                    _streamIO.TextElement.Interact((i + 1) + ". A visit with Dr. " + patientName);
                 }
 
                 _streamIO.TextElement.Interact("   From " + visits[i].StartTime.ToLocalTime() +
@@ -57,11 +83,11 @@ namespace Client.Actions
             }
         }
 
-        private async Task<string> GetDoctorName(string username)
+        private async Task<string> GetName(string username, string type)
         {
             try
             {
-                return await _client.GetDoctorName(username);
+                return await _client.GetName(username, type);
             }
             catch (MediCenterException e)
             {
