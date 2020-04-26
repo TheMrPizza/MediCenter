@@ -10,11 +10,13 @@ namespace Client.IO.ConsoleIO
         {
             for (int i = 0; i < _options.Count; i++)
             {
-                Console.WriteLine("[" + (i + 1) + "] " + _options[i]);
+                Console.WriteLine("[" + (i + 1) + "] " + _options[i].Name);
             }
+
+            Console.WriteLine();
         }
 
-        protected override string ValidateInput()
+        protected override object ValidateInput()
         {
             if (!int.TryParse(_input, out _))
             {
@@ -27,7 +29,7 @@ namespace Client.IO.ConsoleIO
                 throw new ParsingExcpetion("Option number is out of range");
             }
 
-            return _options[inputNum - 1];
+            return _options[inputNum - 1].Value;
         }
 
         protected override void ReadInput()
@@ -37,7 +39,10 @@ namespace Client.IO.ConsoleIO
 
         protected override void PrintException(MediCenterException exception)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(exception.Message);
+            Console.WriteLine();
+            Console.ResetColor();
         }
     }
 }

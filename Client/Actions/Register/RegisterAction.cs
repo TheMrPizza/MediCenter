@@ -5,20 +5,20 @@ using Client.IO.Abstract;
 
 namespace Client.Actions
 {
-    public class HomeMenuAction : ActionBase
+    public class RegisterAction : ActionBase
     {
         private OrderedDictionary _options;
 
-        public HomeMenuAction(MediClient client, IStreamIO streamIO) : base(client, streamIO)
+        public RegisterAction(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
             _options = new OrderedDictionary {
-                { "Sign In", new SignInAction(client, streamIO) },
-                { "Register", new RegisterAction(client, streamIO) } };
+                { "A doctor", new RegisterDoctorAction(client, streamIO) },
+                { "A patient", new RegisterPatientAction(client, streamIO) } };
         }
 
         public override Task<ActionBase> Run()
         {
-            _streamIO.TextElement.Interact("Welcome to MediCenter!");
+            _streamIO.TextElement.Interact("Register as...");
             ActionBase nextAction = _streamIO.ListElement.Interact(_options) as ActionBase;
             return Task.FromResult(nextAction);
         }

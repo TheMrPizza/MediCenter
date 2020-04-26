@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -23,19 +25,19 @@ namespace Client.HttpClients
             Config();
         }
 
-        public async Task<T> SignInAsync<T>(string username, string password, string type)
+        public async Task<T> SignIn<T>(string username, string password, string type)
             where T: IPerson
         {
             try
             {
                 HttpResponseMessage response = await _httpClient.GetAsync(
-                    "users/" + type + "/" + username + "/" + password);
+                    type + "/" + username + "/" + password);
                 if (response.IsSuccessStatusCode)
                 {
                     return await Serializer.Deserialize<T>(response);
                 }
 
-                throw new NotFoundException("Username or password is incorrect");
+                throw new RequestException("Username or password is incorrect");
             }
             catch (HttpRequestException)
             {
@@ -43,14 +45,85 @@ namespace Client.HttpClients
             }
         }
 
-        public async Task<bool> RegisterAsync<T>(T person, string type)
+        public async Task<bool> Register<T>(T person, string type)
             where T: IPerson
         {
             try
             {
                 HttpResponseMessage response = await _httpClient.PostAsync(
-                    "users/" + type, Serializer.Serialize(person));
-                return response.IsSuccessStatusCode;
+                    type, Serializer.Serialize(person));
+                if (response.IsSuccessStatusCode)
+                {
+                    if (!await Serializer.Deserialize<bool>(response))
+                    {
+                        throw new RequestException("Username already exists");
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
+        public async Task<Visit> ScheduleVisit(Visit visit)
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.PostAsync(
+                    "visits", Serializer.Serialize(visit));
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<Visit>(response);
+                }
+                else if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    throw new RequestException("You have another visit at the requested time");
+                }
+
+                throw new RequestException("Cannot find a doctor for the visit");
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
+        public async Task<List<Visit>> GetVisits()
+        {
+            try
+            {
+                string type = User is Doctor ? "doctors" : "patients";
+                HttpResponseMessage response = await _httpClient.GetAsync(
+                    type + "/" + User.Username + "/" + User.Password + "/visits");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<List<Visit>>(response);
+                }
+
+                throw new RequestException("Cannot find visits");
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
+        public async Task<string> GetName(string username, string type)
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync(type + "/" + username);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<string>(response);
+                }
+
+                throw new RequestException("Cannot find a user with the given username");
             }
             catch (HttpRequestException)
             {

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -14,29 +14,35 @@ namespace Common
         public string Password { get; set; }
 
         [BsonElement("Name")]
-        [JsonPropertyName("Name")]
         public string Name { get; set; }
 
         [BsonElement("Birthday")]
-        [JsonPropertyName("Birthday")]
         public DateTime Birthday { get; set; }
 
         [BsonElement("Address")]
-        [JsonPropertyName("Address")]
         public string Address { get; set; }
 
-        public Doctor()
-        {
+        [BsonElement("Specialities")]
+        public List<Speciality> Specialities { get; set; }
 
-        }
+        [BsonElement("VisitsId")]
+        public List<string> VisitsId { get; set; }
 
-        public Doctor(string username, string password, string name, DateTime birthday, string address)
+        public Doctor(string username, string password, string name, DateTime birthday, string address,
+                      List<Speciality> specialities)
         {
             Username = username;
             Password = password;
             Name = name;
             Birthday = birthday;
             Address = address;
+            Specialities = specialities;
+            VisitsId = new List<string>();
+        }
+
+        public Doctor()
+        {
+
         }
     }
 }

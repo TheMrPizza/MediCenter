@@ -1,14 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using Client.Exceptions;
 
 namespace Client.IO.Abstract
 {
     public abstract class ListElementBase
     {
-        protected List<string> _options { get; set; }
+        protected List<ListOption> _options { get; set; }
         protected string _input { get; set; }
 
-        public string Interact(List<string> options)
+        public object Interact(List<ListOption> options)
         {
             _options = options;
             while (true)
@@ -24,7 +27,24 @@ namespace Client.IO.Abstract
             }
         }
 
-        private string Execute()
+        public object Interact(OrderedDictionary optionDict)
+        {
+            var options = new List<ListOption>();
+            foreach (DictionaryEntry entry in optionDict)
+            {
+                options.Add(new ListOption(entry.Key as string, entry.Value));
+            }
+
+            return Interact(options);
+        }
+
+        public object Interact(List<string> names)
+        {
+            var options = names.Select(name => new ListOption(name)).ToList();
+            return Interact(options);
+        }
+
+        private object Execute()
         {
             PrintOptions();
             ReadInput();
@@ -32,7 +52,7 @@ namespace Client.IO.Abstract
         }
 
         protected abstract void PrintOptions();
-        protected abstract string ValidateInput();
+        protected abstract object ValidateInput();
         protected abstract void ReadInput();
         protected abstract void PrintException(MediCenterException exception);
     }

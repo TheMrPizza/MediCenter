@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Common
 {
@@ -9,5 +10,6 @@ namespace Common
         string Name { get; set; }
         DateTime Birthday { get; set; }
         string Address { get; set; }
+        List<string> VisitsId { get; set; }
     }
 }
