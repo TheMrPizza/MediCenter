@@ -30,7 +30,7 @@ namespace Client.HttpClients
             try
             {
                 HttpResponseMessage response = await _httpClient.GetAsync(
-                    "users/" + type + "/" + username + "/" + password);
+                    type + "/" + username + "/" + password);
                 if (response.IsSuccessStatusCode)
                 {
                     return await Serializer.Deserialize<T>(response);
@@ -50,7 +50,7 @@ namespace Client.HttpClients
             try
             {
                 HttpResponseMessage response = await _httpClient.PostAsync(
-                    "users/" + type, Serializer.Serialize(person));
+                    type, Serializer.Serialize(person));
                 return response.IsSuccessStatusCode;
             }
             catch (HttpRequestException)
@@ -84,7 +84,7 @@ namespace Client.HttpClients
             {
                 string type = User is Doctor ? "doctors" : "patients";
                 HttpResponseMessage response = await _httpClient.GetAsync(
-                    "users/" + type + "/" + User.Username + "/" + User.Password + "/visits");
+                    type + "/" + User.Username + "/" + User.Password + "/visits");
                 if (response.IsSuccessStatusCode)
                 {
                     return await Serializer.Deserialize<List<Visit>>(response);
@@ -102,7 +102,7 @@ namespace Client.HttpClients
         {
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync("users/doctors/" + username);
+                HttpResponseMessage response = await _httpClient.GetAsync("doctors/" + username);
                 if (response.IsSuccessStatusCode)
                 {
                     return await Serializer.Deserialize<string>(response);
