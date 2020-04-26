@@ -34,7 +34,12 @@ namespace Client.Actions
                 return new HomeMenuAction(_client, _streamIO);
             }
 
-            return new MainMenuAction(_client, _streamIO);
+            if (_client.User is Doctor)
+            {
+                return new DoctorMainMenuAction(_client, _streamIO);
+            }
+
+            return new PatientMainMenuAction(_client, _streamIO);
         }
 
         private async Task<IPerson> SignIn(string username, string password, string type)

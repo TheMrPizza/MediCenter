@@ -5,14 +5,15 @@ using Client.IO.Abstract;
 
 namespace Client.Actions
 {
-    public class MainMenuAction : ActionBase
+    public class PatientMainMenuAction : ActionBase
     {
         private OrderedDictionary _options { get; set; }
 
-        public MainMenuAction(MediClient client, IStreamIO streamIO) : base(client, streamIO)
+        public PatientMainMenuAction(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
             _options = new OrderedDictionary {
-                { "Order a visit",  new OrderVisitAction(client, streamIO) } };
+                { "Order a visit",  new OrderVisitAction(client, streamIO) },
+                { "View my visits", new ViewVisitsAction(client, streamIO) } };
         }
 
         public override Task<ActionBase> Run()
