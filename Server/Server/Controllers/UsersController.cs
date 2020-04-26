@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Server.Services.Abstract;
 using Common;
 
@@ -37,6 +38,18 @@ namespace Server.Controllers
             }
 
             return patient;
+        }
+
+        [HttpGet("doctors/{username}/{password}/visits")]
+        public ActionResult<List<Visit>> GetDoctorVisits(string username, string password)
+        {
+            Doctor doctor = _service.DoctorsService.SignIn(username, password);
+            if (doctor == null)
+            {
+                return null;
+            }
+
+            return _service.DoctorsService.GetDoctorVisits(username);
         }
 
         [HttpGet("doctors/{username}")]

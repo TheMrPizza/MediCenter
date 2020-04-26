@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
@@ -31,7 +32,6 @@ namespace Server.Services.MongoDB
             try
             {
                 _doctors.InsertOne(doctor);
-                doctor = Get(doctor.Username);
                 return true;
             }
             catch (MongoWriteException)
@@ -46,13 +46,12 @@ namespace Server.Services.MongoDB
         /// </summary>
         public Doctor FindDoctorForVisit(Visit visit)
         {
-            var a = _doctors.Aggregate().Match(doc => doc.Specialities.Contains(visit.Speciality))
+            var doctorVisits = _doctors.Aggregate().Match(doc => doc.Specialities.Contains(visit.Speciality))
                 .Lookup("Visits", "VisitsId", "_id", "Visits")
-                //.Lookup<BsonDocument>("Visits", (Doctor doc) => doc.Visi, (BsonDocument bd) => bd["_id"], "Visits")
                 .Project(p => new { Username = p["_id"], Visits = p["Visits"] })
                 .ToList();
 
-            DoctorVisits dv = a.Select(document => BsonSerializer.Deserialize<DoctorVisits>(document.ToBsonDocument()))
+            DoctorVisits dv = doctorVisits.Select(document => BsonSerializer.Deserialize<DoctorVisits>(document.ToBsonDocument()))
                 .FirstOrDefault(dv => !dv.Visits.Any(vis => AreVisitsOverlapping(vis, visit)));
 
             if (dv == null)
@@ -75,6 +74,17 @@ namespace Server.Services.MongoDB
             {
                 return false;
             }
+        }
+
+        public List<Visit> GetDoctorVisits(string username)
+        {
+            var visits = _doctors.Aggregate().Match(doc => doc.Username == username)
+                .Lookup("Visits", "VisitsId", "_id", "Visits")
+                .Project(p => new { Visits = p["Visits"] })
+                .ToList();
+
+            return visits.Select(document => BsonSerializer.Deserialize<Visit>(document.ToBsonDocument()))
+                    .Take(5).ToList();
         }
 
         public Doctor Get(string username)

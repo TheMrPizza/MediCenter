@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using System.Collections.Generic;
+using Common;
 
 namespace Server.Services.Abstract
 {
@@ -8,6 +9,7 @@ namespace Server.Services.Abstract
         bool Register(Doctor doctor);
         Doctor FindDoctorForVisit(Visit visit);
         bool ScheduleVisit(Doctor doctor, Visit visit);
+        List<Visit> GetDoctorVisits(string username);
         Doctor Get(string username);
     }
 }
