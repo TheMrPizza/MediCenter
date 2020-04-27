@@ -3,7 +3,6 @@ using Client.Actions.InputManagers;
 using Client.HttpClients;
 using Client.IO.Abstract;
 using Client.Exceptions;
-using Common;
 
 namespace Client.Actions
 {
@@ -22,6 +21,7 @@ namespace Client.Actions
             SignInContent content = InputManager.GetInput();
             if (await SignIn(content))
             {
+                MainMenuAction = content.MainMenuAction;
                 return MainMenuAction;
             }
 

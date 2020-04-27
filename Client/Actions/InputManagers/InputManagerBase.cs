@@ -19,14 +19,6 @@ namespace Client.Actions.InputManagers
 
         }
 
-        public virtual T GetInput()
-        {
-            return ProcessInput();
-        }
-
-        public virtual T ProcessInput()
-        {
-            return default;
-        }
+        public abstract T GetInput();
     }
 }

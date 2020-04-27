@@ -8,12 +8,13 @@ namespace Client.Actions
     {
         protected MediClient _client { get; }
         protected IStreamIO _streamIO { get; }
-        protected ActionBase MainMenuAction { get; set; }
+        public ActionBase MainMenuAction { get; set; }
 
         public ActionBase(MediClient client, IStreamIO streamIO)
         {
             _client = client;
             _streamIO = streamIO;
+            MainMenuAction = null;
         }
 
         //public Task<ActionBase> Act()

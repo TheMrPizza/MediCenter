@@ -5,7 +5,7 @@ namespace Client.Actions.InputManagers
 {
     public class SignInContent
     {
-        public delegate Task<IPerson> ClientSignIn<out T>(string username, string password, string type);
+        public delegate Task<IPerson> ClientSignIn<T>(string username, string password, string type);
 
         public string Username { get; set; }
         public string Password { get; set; }
