@@ -14,11 +14,9 @@ namespace Server.Services.MongoDB
     {
         protected readonly IMongoCollection<T> _collection;
 
-        public MongoDBUsersServiceBase(IDBSettings settings, string collectionName)
+        public MongoDBUsersServiceBase(MongoClient client, IDBSettings settings, string collectionName)
         {
-            var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
-
             _collection = database.GetCollection<T>(settings.CollectionsNames[collectionName]);
         }
 
