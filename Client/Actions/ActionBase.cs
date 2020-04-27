@@ -18,10 +18,6 @@ namespace Client.Actions
             _streamIO = streamIO;
         }
 
-        //public Task<ActionBase> Act()
-        //{
-
-        //}
         protected void SetMainMenuAction(ActionBase mainMenuAction)
         {
             OnMainMenuAction?.Invoke(mainMenuAction);
