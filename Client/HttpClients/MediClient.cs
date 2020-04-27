@@ -1,0 +1,142 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Client.Serializers;
+using Client.Exceptions;
+using Common;
+
+namespace Client.HttpClients
+{
+    public class MediClient
+    {
+        private static HttpClient _httpClient = new HttpClient();
+        public IPerson User { get; set; }
+        public ISerializer Serializer { get; }
+        public IConfiguration Configuration { get; }
+
+        public MediClient(ISerializer serializer, IConfiguration configuration)
+        {
+            Serializer = serializer;
+            Configuration = configuration;
+            Config();
+        }
+
+        public async Task<IPerson> SignIn<T>(string username, string password, string type)
+            where T: IPerson
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync(
+                    type + "/" + username + "/" + password);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<T>(response);
+                }
+
+                throw new RequestException("Username or password is incorrect");
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
+        public async Task<bool> Register<T>(T person, string type)
+            where T: IPerson
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.PostAsync(
+                    type, Serializer.Serialize(person));
+                if (response.IsSuccessStatusCode)
+                {
+                    if (!await Serializer.Deserialize<bool>(response))
+                    {
+                        throw new RequestException("Username already exists");
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
+        public async Task<Visit> ScheduleVisit(Visit visit)
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.PostAsync(
+                    "visits", Serializer.Serialize(visit));
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<Visit>(response);
+                }
+                else if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    throw new RequestException("You have another visit at the requested time");
+                }
+
+                throw new RequestException("Cannot find a doctor for the visit");
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
+        public async Task<List<Visit>> GetVisits()
+        {
+            try
+            {
+                string type = User is Doctor ? "doctors" : "patients";
+                HttpResponseMessage response = await _httpClient.GetAsync(
+                    type + "/" + User.Username + "/" + User.Password + "/visits");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<List<Visit>>(response);
+                }
+
+                throw new RequestException("Cannot find visits");
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
+        public async Task<string> GetName(string username, string type)
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync(type + "/" + username);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<string>(response);
+                }
+
+                throw new RequestException("Cannot find a user with the given username");
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
+        private void Config()
+        {
+            _httpClient.BaseAddress = new Uri(Configuration["ServerURL"]);
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+        }
+    }
+}
