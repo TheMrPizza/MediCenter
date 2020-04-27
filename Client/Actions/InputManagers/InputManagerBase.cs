@@ -1,14 +1,14 @@
 ﻿using Client.HttpClients;
 using Client.IO.Abstract;
 
-namespace Client.Actions.IOManagers
+namespace Client.Actions.InputManagers
 {
-    public abstract class IOManagerBase<T>
+    public abstract class InputManagerBase<T>
     {
         protected MediClient _client { get; }
         protected IStreamIO _streamIO { get; }
 
-        public IOManagerBase(MediClient client, IStreamIO streamIO)
+        public InputManagerBase(MediClient client, IStreamIO streamIO)
         {
             _client = client;
             _streamIO = streamIO;

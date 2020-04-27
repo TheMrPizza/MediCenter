@@ -4,9 +4,9 @@ using Client.HttpClients;
 using Client.IO.Abstract;
 using Common;
 
-namespace Client.Actions.IOManagers
+namespace Client.Actions.InputManagers
 {
-    public class RegisterDoctorIO : IOManagerBase<Doctor>
+    public class RegisterDoctorIO : InputManagerBase<Doctor>
     {
         public RegisterDoctorIO(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {

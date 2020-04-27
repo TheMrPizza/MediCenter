@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Client.Actions.IOManagers;
+using Client.Actions.InputManagers;
 using Client.HttpClients;
 using Client.IO.Abstract;
 

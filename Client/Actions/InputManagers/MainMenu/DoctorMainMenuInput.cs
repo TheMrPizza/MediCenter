@@ -2,9 +2,9 @@
 using Client.HttpClients;
 using Client.IO.Abstract;
 
-namespace Client.Actions.IOManagers
+namespace Client.Actions.InputManagers
 {
-    public class DoctorMainMenuIO : IOManagerBase<ActionBase>
+    public class DoctorMainMenuIO : InputManagerBase<ActionBase>
     {
         private OrderedDictionary _options;
 

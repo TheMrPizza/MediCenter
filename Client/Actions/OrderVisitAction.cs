@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Client.Actions.InputManagers;
 using Client.HttpClients;
 using Client.IO.Abstract;
 using Client.Exceptions;
@@ -11,11 +12,11 @@ namespace Client.Actions
 {
     public class OrderVisitAction : ActionBase
     {
-        private List<string> _options { get; set; }
+        public InputManagerBase<Visit> InputManager { get; set; }
 
         public OrderVisitAction(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
-            _options = Enum.GetNames(typeof(Speciality)).ToList();
+            InputManager = new OrderVisitIO(client, streamIO);
         }
 
         public async override Task<ActionBase> Run()
