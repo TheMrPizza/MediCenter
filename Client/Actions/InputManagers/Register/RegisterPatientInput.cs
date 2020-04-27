@@ -5,9 +5,9 @@ using Common;
 
 namespace Client.Actions.InputManagers
 {
-    public class RegisterPatientIO : InputManagerBase<Patient>
+    public class RegisterPatientInput : InputManagerBase<Patient>
     {
-        public RegisterPatientIO(MediClient client, IStreamIO streamIO) : base(client, streamIO)
+        public RegisterPatientInput(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
 
         }

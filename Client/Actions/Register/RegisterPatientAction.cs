@@ -13,7 +13,7 @@ namespace Client.Actions
 
         public RegisterPatientAction(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
-            InputManager = new RegisterPatientIO(client, streamIO);
+            InputManager = new RegisterPatientInput(client, streamIO);
         }
 
         public async override Task<ActionBase> Run()

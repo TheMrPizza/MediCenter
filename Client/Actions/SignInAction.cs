@@ -29,7 +29,7 @@ namespace Client.Actions
                 return new HomeMenuAction(_client, _streamIO);
             }
 
-            return new MainMenuAction(_client, _streamIO);
+            return MainMenuAction;
         }
 
         private async Task<IPerson> SignIn(string username, string password, string type)

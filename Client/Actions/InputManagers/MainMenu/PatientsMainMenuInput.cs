@@ -4,11 +4,11 @@ using Client.IO.Abstract;
 
 namespace Client.Actions.InputManagers
 {
-    public class PatientsMainMenuIO : InputManagerBase<ActionBase>
+    public class PatientsMainMenuInput : InputManagerBase<ActionBase>
     {
         private OrderedDictionary _options { get; set; }
 
-        public PatientsMainMenuIO(MediClient client, IStreamIO streamIO) : base(client, streamIO)
+        public PatientsMainMenuInput(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
             _options = new OrderedDictionary {
                 { "Order a visit",  new OrderVisitAction(client, streamIO) },

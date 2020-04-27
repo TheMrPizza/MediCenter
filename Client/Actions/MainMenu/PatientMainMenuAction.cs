@@ -11,7 +11,7 @@ namespace Client.Actions
 
         public PatientMainMenuAction(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
-            InputManager = new PatientsMainMenuIO(client, streamIO);
+            InputManager = new PatientsMainMenuInput(client, streamIO);
         }
 
         public override Task<ActionBase> Run()

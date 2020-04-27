@@ -29,7 +29,7 @@ namespace Client.Actions
                 }
             }
 
-            return new MainMenuAction(_client, _streamIO);
+            return MainMenuAction;
         }
 
         private async Task PrintDoctorVisits(List<Visit> visits)
