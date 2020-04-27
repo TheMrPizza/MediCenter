@@ -21,8 +21,8 @@ namespace Client.Actions
             SignInContent content = InputManager.GetInput();
             if (await SignIn(content))
             {
-                MainMenuAction = content.MainMenuAction;
-                return MainMenuAction;
+                SetMainMenuAction(content.MainMenuAction);
+                return null;
             }
 
             return new HomeMenuAction(_client, _streamIO);
@@ -33,7 +33,6 @@ namespace Client.Actions
             try
             {
                 _client.User = await content.SignIn();
-                MainMenuAction = content.MainMenuAction;
                 return true;
             }
             catch (RequestException e)

@@ -22,13 +22,18 @@ namespace Client.MediCenter
         {
             while (true)
             {
+                CurAction.OnMainMenuAction += OnSetMainMainAction;
                 CurAction = CurAction.Run().Result;
-                MainMenuAction = CurAction.MainMenuAction;
                 if (CurAction == null)
                 {
-                    break;
+                    CurAction = MainMenuAction;
                 }
             }
+        }
+
+        public void OnSetMainMainAction(ActionBase mainMenuAction)
+        {
+            MainMenuAction = mainMenuAction;
         }
     }
 }

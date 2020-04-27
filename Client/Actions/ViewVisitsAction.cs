@@ -24,7 +24,7 @@ namespace Client.Actions
                 await PrintVisits(visits);
             }
 
-            return MainMenuAction;
+            return null;
         }
 
         private async Task PrintVisits(List<Visit> visits)
