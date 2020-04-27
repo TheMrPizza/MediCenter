@@ -1,5 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Client.Actions.IOManagers;
 using Client.Exceptions;
 using Client.HttpClients;
 using Client.IO.Abstract;
@@ -9,14 +9,16 @@ namespace Client.Actions
 {
     public class RegisterPatientAction : ActionBase
     {
+        public InputManagerBase<Patient> InputManager { get; set; }
+
         public RegisterPatientAction(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
-
+            InputManager = new RegisterPatientIO(client, streamIO);
         }
 
         public async override Task<ActionBase> Run()
         {
-            Patient patient = GetInput();
+            Patient patient = InputManager.GetInput();
             await Register(patient);
             return new HomeMenuAction(_client, _streamIO);
         }

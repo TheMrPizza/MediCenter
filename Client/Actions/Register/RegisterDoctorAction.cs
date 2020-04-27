@@ -9,16 +9,16 @@ namespace Client.Actions
 {
     public class RegisterDoctorAction : ActionBase
     {
-        public IOManagerBase<Doctor> IOManager { get; set; }
+        public InputManagerBase<Doctor> InputManager { get; set; }
 
         public RegisterDoctorAction(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
-            IOManager = new RegisterDoctorIO(client, streamIO);
+            InputManager = new RegisterDoctorIO(client, streamIO);
         }
 
         public async override Task<ActionBase> Run()
         {
-            Doctor doctor = IOManager.GetInput();
+            Doctor doctor = InputManager.GetInput();
             await Register(doctor);
             return new HomeMenuAction(_client, _streamIO);
         }
