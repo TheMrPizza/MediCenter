@@ -1,52 +1,44 @@
 ﻿using System.Threading.Tasks;
-using System.Collections.Specialized;
+using Client.Actions.InputManagers;
 using Client.HttpClients;
 using Client.IO.Abstract;
 using Client.Exceptions;
-using Common;
 
 namespace Client.Actions
 {
     public class SignInAction : ActionBase
     {
-        private OrderedDictionary _options;
+        public InputManagerBase<SignInContent> InputManager { get; set; }
 
         public SignInAction(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
-            _options = new OrderedDictionary {
-                { "A doctor", "doctors" }, {"A patient", "patients" } };
+            InputManager = new SignInInput(client, streamIO);
         }
 
         public async override Task<ActionBase> Run()
         {
-            _streamIO.TextElement.Interact("Sign in as...");
-            string type = _streamIO.ListElement.Interact(_options) as string;
-            string username = _streamIO.FieldTextElement.Interact("Username");
-            string password = _streamIO.FieldTextElement.Interact("Password");
-            _client.User = await SignIn(username, password, type);
-            if (_client.User == null)
+            InputManager.PrintInstructions();
+            SignInContent content = InputManager.GetInput();
+            if (await SignIn(content))
             {
-                return new HomeMenuAction(_client, _streamIO);
+                SetMainMenuAction(content.MainMenuAction);
+                return null;
             }
 
-            return new MainMenuAction(_client, _streamIO);
+            return new HomeMenuAction(_client, _streamIO);
         }
 
-        private async Task<IPerson> SignIn(string username, string password, string type)
+        private async Task<bool> SignIn(SignInContent content)
         {
             try
             {
-                if (type == "doctors")
-                {
-                    return await _client.SignIn<Doctor>(username, password, type);
-                }
-
-                return await _client.SignIn<Patient>(username, password, type);
+                _client.User = await content.SignIn();
+                return true;
             }
             catch (RequestException e)
             {
                 _streamIO.ErrorElement.Interact(e);
-                return null;
+                return false;
             }
         }
     }

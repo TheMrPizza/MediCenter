@@ -9,16 +9,14 @@ using Common;
 
 namespace Server.Services.MongoDB
 {
-    public class MongoDBUsersServiceBase<T> : IUsersService<T>
+    public abstract class MongoDBUsersServiceBase<T> : IUsersService<T>
         where T : IPerson
     {
         protected readonly IMongoCollection<T> _collection;
 
-        public MongoDBUsersServiceBase(IDBSettings settings, string collectionName)
+        public MongoDBUsersServiceBase(MongoClient client, IDBSettings settings, string collectionName)
         {
-            var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
-
             _collection = database.GetCollection<T>(settings.CollectionsNames[collectionName]);
         }
 
@@ -68,8 +66,9 @@ namespace Server.Services.MongoDB
         public List<Visit> GetVisits(string username)
         {
             var visits = _collection.Aggregate().Match(per => per.Username == username)
-                .Lookup("Visits", "VisitsId", "_id", "Visits")
-                .Project(p => new { Username = p["_id"], Visits = p["Visits"] })
+                .Lookup(LookupFields.FOREIGN_COLLECTION_NAME, LookupFields.LOCAL_FIELD,
+                        LookupFields.FOREIGN_FIELD, LookupFields.AS)
+                .Project(p => new { Username = p[LookupFields.FOREIGN_FIELD], Visits = p[LookupFields.AS] })
                 .FirstOrDefault();
 
             return BsonSerializer.Deserialize<PersonVisits>(visits.ToBsonDocument())

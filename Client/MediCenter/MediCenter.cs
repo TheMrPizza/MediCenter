@@ -8,25 +8,32 @@ namespace Client.MediCenter
     {
         public MediClient Client { get; }
         public IStreamIO StreamIO { get; }
-        public ActionBase Action { get; set; }
+        public ActionBase CurAction { get; set; }
+        public ActionBase MainMenuAction { get; set; }
 
         public MediCenter(MediClient client, IStreamIO streamIO)
         {
             Client = client;
             StreamIO = streamIO;
-            Action = new HomeMenuAction(client, streamIO);
+            CurAction = new HomeMenuAction(client, streamIO);
         }
 
         public void Run()
         {
             while (true)
             {
-                Action = Action.Run().Result;
-                if (Action == null)
+                CurAction.OnMainMenuAction += OnSetMainMainAction;
+                CurAction = CurAction.Run().Result;
+                if (CurAction == null)
                 {
-                    break;
+                    CurAction = MainMenuAction;
                 }
             }
+        }
+
+        public void OnSetMainMainAction(ActionBase mainMenuAction)
+        {
+            MainMenuAction = mainMenuAction;
         }
     }
 }

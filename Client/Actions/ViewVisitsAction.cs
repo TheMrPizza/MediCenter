@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Client.Actions.OutputManagers;
 using Client.HttpClients;
 using Client.IO.Abstract;
 using Client.Exceptions;
@@ -9,9 +10,10 @@ namespace Client.Actions
 {
     public class ViewVisitsAction : ActionBase
     {
+        public IOutputManager<VisitContent> OutputManager { get; set; }
         public ViewVisitsAction(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
-
+            OutputManager = new ViewVisitsOutput(client, streamIO);
         }
 
         public async override Task<ActionBase> Run()
@@ -19,54 +21,19 @@ namespace Client.Actions
             List<Visit> visits = await GetVisits();
             if (visits != null)
             {
-                if (_client.User is Doctor)
-                {
-                    await PrintDoctorVisits(visits);
-                }
-                else
-                {
-                    await PrintPatientVisits(visits);
-                }
+                await PrintVisits(visits);
             }
 
-            return new MainMenuAction(_client, _streamIO);
+            return null;
         }
 
-        private async Task PrintDoctorVisits(List<Visit> visits)
+        private async Task PrintVisits(List<Visit> visits)
         {
             for (int i = 0; i < visits.Count; i++)
             {
-                string doctorName = await GetName(visits[i].PatientUsername, "patients");
-                if (doctorName == null)
-                {
-                    _streamIO.TextElement.Interact((i + 1) + ". A visit with unknown patient");
-                }
-                else
-                {
-                    _streamIO.TextElement.Interact((i + 1) + ". A visit with " + doctorName);
-                }
-
-                _streamIO.TextElement.Interact("   From " + visits[i].StartTime.ToLocalTime() +
-                                               " to " + visits[i].EndTime.ToLocalTime());
-            }
-        }
-
-        private async Task PrintPatientVisits(List<Visit> visits)
-        {
-            for (int i = 0; i < visits.Count; i++)
-            {
-                string patientName = await GetName(visits[i].DoctorUsername, "doctors");
-                if (patientName == null)
-                {
-                    _streamIO.TextElement.Interact((i + 1) + ". A visit with unknown doctor");
-                }
-                else
-                {
-                    _streamIO.TextElement.Interact((i + 1) + ". A visit with Dr. " + patientName);
-                }
-
-                _streamIO.TextElement.Interact("   From " + visits[i].StartTime.ToLocalTime() +
-                                               " to " + visits[i].EndTime.ToLocalTime());
+                string personName = await GetName(visits[i]);
+                VisitContent content = new VisitContent(visits[i], personName, i + 1);
+                OutputManager.PrintOutput(content);
             }
         }
 
@@ -83,11 +50,16 @@ namespace Client.Actions
             }
         }
 
-        private async Task<string> GetName(string username, string type)
+        private async Task<string> GetName(Visit visit)
         {
             try
             {
-                return await _client.GetName(username, type);
+                if (_client.User is Doctor)
+                {
+                    return await _client.GetName(visit.PatientUsername, "patients");
+                }
+
+                return await _client.GetName(visit.DoctorUsername, "doctors");
             }
             catch (MediCenterException e)
             {

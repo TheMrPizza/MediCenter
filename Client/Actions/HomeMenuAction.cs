@@ -1,5 +1,5 @@
-﻿using System.Collections.Specialized;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Client.Actions.InputManagers;
 using Client.HttpClients;
 using Client.IO.Abstract;
 
@@ -7,19 +7,17 @@ namespace Client.Actions
 {
     public class HomeMenuAction : ActionBase
     {
-        private OrderedDictionary _options;
+        public InputManagerBase<ActionBase> InputManager { get; set; }
 
         public HomeMenuAction(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
-            _options = new OrderedDictionary {
-                { "Sign In", new SignInAction(client, streamIO) },
-                { "Register", new RegisterAction(client, streamIO) } };
+            InputManager = new HomeMenuInput(client, streamIO);
         }
 
         public override Task<ActionBase> Run()
         {
-            _streamIO.TextElement.Interact("Welcome to MediCenter!");
-            ActionBase nextAction = _streamIO.ListElement.Interact(_options) as ActionBase;
+            InputManager.PrintInstructions();
+            ActionBase nextAction = InputManager.GetInput();
             return Task.FromResult(nextAction);
         }
     }

@@ -10,7 +10,7 @@ namespace Server.Services.MongoDB
 {
     public class MongoDBPatientsService : MongoDBUsersServiceBase<Patient>, IPatientsService
     {
-        public MongoDBPatientsService(IDBSettings settings) : base(settings, "Patients")
+        public MongoDBPatientsService(MongoClient client, IDBSettings settings) : base(client, settings, "Patients")
         {
 
         }

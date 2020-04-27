@@ -10,7 +10,7 @@ namespace Server.Services.MongoDB
 {
     public class MongoDBDoctorsService : MongoDBUsersServiceBase<Doctor>, IDoctorsService
     {
-        public MongoDBDoctorsService(IDBSettings settings) : base(settings, "Doctors")
+        public MongoDBDoctorsService(MongoClient client, IDBSettings settings) : base(client, settings, "Doctors")
         {
 
         }
@@ -22,8 +22,9 @@ namespace Server.Services.MongoDB
         public Doctor FindDoctorForVisit(Visit visit)
         {
             var visits = _collection.Aggregate().Match(doc => doc.Specialities.Contains(visit.Speciality))
-                .Lookup("Visits", "VisitsId", "_id", "Visits")
-                .Project(p => new { Username = p["_id"], Visits = p["Visits"] })
+                .Lookup(LookupFields.FOREIGN_COLLECTION_NAME, LookupFields.LOCAL_FIELD,
+                        LookupFields.FOREIGN_FIELD, LookupFields.AS)
+                .Project(p => new { Username = p[LookupFields.FOREIGN_FIELD], Visits = p[LookupFields.AS] })
                 .ToList();
 
             PersonVisits dv = visits.Select(document => BsonSerializer.Deserialize<PersonVisits>(document.ToBsonDocument()))

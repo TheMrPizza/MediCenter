@@ -1,5 +1,4 @@
 ﻿using Server.Services.Abstract;
-using Server.Config;
 
 namespace Server.Services.MongoDB
 {
@@ -9,11 +8,12 @@ namespace Server.Services.MongoDB
         public IPatientsService PatientsService { get; }
         public IVisitsService VisitsService { get; }
 
-        public MongoDBService(IDBSettings settings)
+        public MongoDBService(IDoctorsService doctorsService, IPatientsService patientsService,
+            IVisitsService visitsService)
         {
-            DoctorsService = new MongoDBDoctorsService(settings);
-            PatientsService = new MongoDBPatientsService(settings);
-            VisitsService = new MongoDBVisitsService(settings);
+            DoctorsService = doctorsService;
+            PatientsService = patientsService;
+            VisitsService = visitsService;
         }
     }
 }
