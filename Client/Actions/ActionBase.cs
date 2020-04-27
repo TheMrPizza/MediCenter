@@ -15,6 +15,11 @@ namespace Client.Actions
             _streamIO = streamIO;
         }
 
+        public Task<ActionBase> Act()
+        {
+
+        }
+
         public abstract Task<ActionBase> Run();
     }
 }
