@@ -14,5 +14,12 @@ namespace Client.Actions.OutputManagers
             PersonName = personName;
             Num = num;
         }
+
+        public VisitContent(Visit visit, string personName)
+        {
+            Visit = visit;
+            PersonName = personName;
+            Num = 0;
+        }
     }
 }

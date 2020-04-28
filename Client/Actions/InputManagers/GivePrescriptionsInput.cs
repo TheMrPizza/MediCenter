@@ -10,13 +10,19 @@ namespace Client.Actions.InputManagers
     public class GivePrescriptionsInput : InputManagerBase<Prescription>
     {
         private List<VisitContent> _visits { get; set; }
+        private List<Medicine> _allMedicines { get; set; }
         private OrderedDictionary _options { get; set; }
 
-        public GivePrescriptionsInput(MediClient client, IStreamIO streamIO, List<VisitContent> visits)
-            : base(client, streamIO)
+        public GivePrescriptionsInput(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
-            _visits = visits;
             _options = GetOptions();
+        }
+
+        public override void Init(InputParams inputParams)
+        {
+            PrescriptionParams prescriptionParams = inputParams as PrescriptionParams;
+            _visits = prescriptionParams.Visits;
+            _allMedicines = prescriptionParams.Medicines;
         }
 
         public override void PrintInstructions()
@@ -27,7 +33,9 @@ namespace Client.Actions.InputManagers
         public override Prescription GetInput()
         {
             Visit visit = _streamIO.ListElement.Interact(_options) as Visit;
+            List<Medicine> medicines = GetMedicines();
 
+            return new Prescription(visit.Id, medicines);
         }
 
         private OrderedDictionary GetOptions()
@@ -40,6 +48,21 @@ namespace Client.Actions.InputManagers
             }
 
             return options;
+        }
+
+        private List<Medicine> GetMedicines()
+        {
+            var medicines = new List<Medicine>();
+            _streamIO.TextElement.Interact("Enter the medicines:");
+            foreach (Medicine m in _allMedicines)
+            {
+                if (_streamIO.FieldBooleanElement.Interact(m.Name))
+                {
+                    medicines.Add(m);
+                }
+            }
+
+            return medicines;
         }
     }
 }
