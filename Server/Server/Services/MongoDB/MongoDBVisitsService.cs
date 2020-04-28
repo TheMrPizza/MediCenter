@@ -38,7 +38,7 @@ namespace Server.Services.MongoDB
             try
             {
                 visit.MedicinesId = safetyMedicines;
-                var update = Builders<Visit>.Update.Set(vis => vis.MedicinesId, safetyMedicines);
+                var update = Builders<Visit>.Update.PushEach(vis => vis.MedicinesId, safetyMedicines);
                 Update(visit.Id, update);
                 return visit;
             }

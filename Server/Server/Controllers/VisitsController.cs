@@ -43,7 +43,7 @@ namespace Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Visit> GivePrescriptions(Prescription prescription)
+        public ActionResult<Visit> AddPrescriptions(Prescription prescription)
         {
             Visit visit = _service.VisitsService.Get(prescription.VisitId);
             if (visit == null)
