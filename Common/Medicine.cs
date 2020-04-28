@@ -15,10 +15,11 @@ namespace Common
         [BsonElement("Reactions")]
         public List<Disease> Reactions { get; set; }
 
-        public Medicine(string id, string name)
+        public Medicine(string id, string name, List<Disease> reactions)
         {
             Id = id;
             Name = name;
+            Reactions = reactions;
         }
 
         public Medicine()

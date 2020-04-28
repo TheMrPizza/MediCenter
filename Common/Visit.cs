@@ -32,7 +32,7 @@ namespace Common
         {
             Id = Guid.NewGuid().ToString();
             PatientUsername = patientUsername;
-            Medicines = new List<Medicine>();
+            MedicinesId = new List<string>();
             Speciality = speciality;
             StartTime = startTime.ToUniversalTime();
             EndTime = endTime.ToUniversalTime();

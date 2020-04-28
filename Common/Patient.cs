@@ -28,13 +28,15 @@ namespace Common
         [BsonElement("VisitsId")]
         public List<string> VisitsId { get; set; }
 
-        public Patient(string username, string password, string name, DateTime birthday, string address)
+        public Patient(string username, string password, string name, DateTime birthday, string address,
+            List<Disease> diseases)
         {
             Username = username;
             Password = password;
             Name = name;
             Birthday = birthday;
             Address = address;
+            Diseases = diseases;
             VisitsId = new List<string>();
         }
 
