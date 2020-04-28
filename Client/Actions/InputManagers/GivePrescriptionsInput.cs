@@ -2,7 +2,6 @@
 using System.Collections.Specialized;
 using Client.HttpClients;
 using Client.IO.Abstract;
-using Client.Actions.OutputManagers;
 using Common;
 
 namespace Client.Actions.InputManagers

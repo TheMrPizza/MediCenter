@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Client.Actions.OutputManagers;
 using Common;
 
 namespace Client.Actions.InputManagers
