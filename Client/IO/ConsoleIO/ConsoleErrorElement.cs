@@ -8,8 +8,13 @@ namespace Client.IO.ConsoleIO
     {
         public override void Interact(MediCenterException exception)
         {
+            Interact(exception.Message);
+        }
+
+        public override void Interact(string msg)
+        {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(exception.Message);
+            Console.WriteLine(msg);
             Console.WriteLine();
             Console.ResetColor();
         }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Common;
 
-namespace Client.Actions.InputManagers
+namespace Common
 {
     public class Prescription
     {

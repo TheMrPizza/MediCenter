@@ -43,16 +43,16 @@ namespace Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Visit> GivePrescriptions(string id, List<Medicine> medicines)
+        public ActionResult<Visit> GivePrescriptions(Prescription prescription)
         {
-            Visit visit = _service.VisitsService.Get(id);
+            Visit visit = _service.VisitsService.Get(prescription.VisitId);
             if (visit == null)
             {
                 return NotFound();
             }
 
             Patient patient = _service.PatientsService.Get(visit.PatientUsername);
-            Visit updatedVisit = _service.VisitsService.AddPrescriptions(visit, patient, medicines);
+            Visit updatedVisit = _service.VisitsService.AddPrescriptions(visit, patient, prescription.Medicines);
             if (updatedVisit == null)
             {
                 return NotFound();

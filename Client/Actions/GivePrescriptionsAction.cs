@@ -34,9 +34,38 @@ namespace Client.Actions
             return new DoctorMainMenuAction(_client, _streamIO);
         }
 
-        private async Task HandlePrescription(Prescription prescription)
+        private async Task<Visit> HandlePrescription(Prescription prescription)
         {
+            try
+            {
+                Visit visit = await _client.GivePrescriptions(prescription);
+                CheckMedicines(prescription, visit);
+                return visit;
+            }
+            catch (RequestException e)
+            {
+                _streamIO.ErrorElement.Interact(e);
+                return null;
+            }
+        }
 
+        private void CheckMedicines(Prescription prescription, Visit visit)
+        {
+            var unsafeMedicines = new List<Medicine>();
+            foreach (Medicine med in prescription.Medicines)
+            {
+                if (!visit.MedicinesId.Contains(med.Id))
+                {
+                    unsafeMedicines.Add(med);
+                }
+            }
+
+            if (unsafeMedicines.Count > 0)
+            {
+                string names = string.Join(", ", unsafeMedicines.Select(med => med.Name));
+                _streamIO.ErrorElement.Interact($"Added all medicines except for {names} due to their" +
+                    $"dangerous reactions with the patient");
+            }
         }
 
         private async Task<List<VisitContent>> GetVisitsContents()
@@ -60,7 +89,7 @@ namespace Client.Actions
         {
             try
             {
-                return await _client.GetMedicines();
+                return await _client.GetAllMedicines();
             }
             catch (RequestException e)
             {
