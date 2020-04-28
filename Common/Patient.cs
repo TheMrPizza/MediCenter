@@ -22,6 +22,9 @@ namespace Common
         [BsonElement("Address")]
         public string Address { get; set; }
 
+        [BsonElement("Diseases")]
+        public List<Disease> Diseases { get; set; }
+
         [BsonElement("VisitsId")]
         public List<string> VisitsId { get; set; }
 

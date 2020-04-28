@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using System.Collections.Generic;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Common
@@ -10,6 +11,9 @@ namespace Common
 
         [BsonElement("Name")]
         public string Name { get; set; }
+
+        [BsonElement("Reactions")]
+        public List<Disease> Reactions { get; set; }
 
         public Medicine(string id, string name)
         {

@@ -17,7 +17,7 @@ namespace Common
         public string DoctorUsername { get; set; }
 
         [BsonElement("Medicines")]
-        public List<Medicine> Medicines { get; set; }
+        public List<string> MedicinesId { get; set; }
 
         [BsonElement("Speciality")]
         public Speciality Speciality { get; set; }
