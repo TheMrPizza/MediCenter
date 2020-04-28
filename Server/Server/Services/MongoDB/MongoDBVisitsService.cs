@@ -1,4 +1,6 @@
-﻿using MongoDB.Driver;
+﻿using System.Collections.Generic;
+using System.Linq;
+using MongoDB.Driver;
 using Server.Services.Abstract;
 using Server.Config;
 using Common;
@@ -33,6 +35,34 @@ namespace Server.Services.MongoDB
             {
                 return false;
             }
+        }
+
+        public Visit AddPrescriptions(Visit visit, Patient patient, List<Medicine> medicines)
+        {
+            List<string> safetyMedicines = medicines.Where(med => CheckMedicineForPatience(patient, med))
+                .Select(med => med.Id).ToList();
+
+            try
+            {
+                visit.MedicinesId = safetyMedicines;
+                var update = Builders<Visit>.Update.Set(vis => vis.MedicinesId, safetyMedicines);
+                Update(visit.Id, update);
+                return visit;
+            }
+            catch (MongoWriteException)
+            {
+                return null;
+            }
+        }
+
+        private void Update(string id, UpdateDefinition<Visit> update)
+        {
+            _visits.UpdateOne(visit => visit.Id == id, update);
+        }
+
+        private bool CheckMedicineForPatience(Patient patient, Medicine medicine)
+        {
+            return !medicine.Reactions.Any(disease => patient.Diseases.Contains(disease));
         }
     }
 }

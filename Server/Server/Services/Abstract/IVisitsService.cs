@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using System.Collections.Generic;
+using Common;
 
 namespace Server.Services.Abstract
 {
@@ -6,5 +7,6 @@ namespace Server.Services.Abstract
     {
         Visit GetVisit(string id);
         bool Schedule(Visit visit);
+        Visit AddPrescriptions(Visit visit, Patient patient, List<Medicine> medicines);
     }
 }
