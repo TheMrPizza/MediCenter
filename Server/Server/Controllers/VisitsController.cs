@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Server.Services.Abstract;
 using Common;
 
@@ -43,7 +42,7 @@ namespace Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Visit> AddPrescriptions(Prescription prescription)
+        public ActionResult<Visit> AddPrescription(Prescription prescription)
         {
             Visit visit = _service.VisitsService.Get(prescription.VisitId);
             if (visit == null)
@@ -52,7 +51,7 @@ namespace Server.Controllers
             }
 
             Patient patient = _service.PatientsService.Get(visit.PatientUsername);
-            Visit updatedVisit = _service.VisitsService.AddPrescriptions(visit, patient, prescription.Medicines);
+            Visit updatedVisit = _service.VisitsService.AddPrescription(visit, patient, prescription.Medicines);
             if (updatedVisit == null)
             {
                 return NotFound();

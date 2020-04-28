@@ -38,7 +38,7 @@ namespace Client.Actions
         {
             try
             {
-                Visit visit = await _client.GivePrescriptions(prescription);
+                Visit visit = await _client.GivePrescription(prescription);
                 CheckMedicines(prescription, visit);
                 return visit;
             }
@@ -64,7 +64,7 @@ namespace Client.Actions
             {
                 string names = string.Join(", ", unsafeMedicines.Select(med => med.Name));
                 _streamIO.ErrorElement.Interact($"Added all medicines except for {names} due to their" +
-                    $"dangerous reactions with the patient");
+                    $" dangerous reactions with the patient");
             }
         }
 
@@ -91,7 +91,7 @@ namespace Client.Actions
             {
                 return await _client.GetAllMedicines();
             }
-            catch (RequestException e)
+            catch (MediCenterException e)
             {
                 _streamIO.ErrorElement.Interact(e);
                 return null;
@@ -104,7 +104,7 @@ namespace Client.Actions
             {
                 return await _client.GetVisits();
             }
-            catch (RequestException e)
+            catch (MediCenterException e)
             {
                 _streamIO.ErrorElement.Interact(e);
                 return null;

@@ -93,7 +93,7 @@ namespace Client.HttpClients
             }
         }
 
-        public async Task<Visit> GivePrescriptions(Prescription prescription)
+        public async Task<Visit> GivePrescription(Prescription prescription)
         {
             try
             {

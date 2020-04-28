@@ -30,7 +30,7 @@ namespace Server.Services.MongoDB
             }
         }
 
-        public Visit AddPrescriptions(Visit visit, Patient patient, List<Medicine> medicines)
+        public Visit AddPrescription(Visit visit, Patient patient, List<Medicine> medicines)
         {
             List<string> safetyMedicines = medicines.Where(med => CheckMedicineForPatience(patient, med))
                 .Select(med => med.Id).ToList();
@@ -38,7 +38,7 @@ namespace Server.Services.MongoDB
             try
             {
                 visit.MedicinesId = safetyMedicines;
-                var update = Builders<Visit>.Update.PushEach(vis => vis.MedicinesId, safetyMedicines);
+                var update = Builders<Visit>.Update.AddToSetEach(vis => vis.MedicinesId, safetyMedicines);
                 Update(visit.Id, update);
                 return visit;
             }
@@ -55,7 +55,7 @@ namespace Server.Services.MongoDB
 
         private void Update(string id, UpdateDefinition<Visit> update)
         {
-            _visits.UpdateOne(visit => visit.Id == id, update);
+            _visits.UpdateOne(visit => visit.Id == id, update, new UpdateOptions { IsUpsert = true });
         }
 
         private bool CheckMedicineForPatience(Patient patient, Medicine medicine)

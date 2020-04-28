@@ -11,7 +11,8 @@ namespace Client.Actions.InputManagers
         public DoctorMainMenuInput(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
             _options = new OrderedDictionary {
-                { "View my visits",  new ViewVisitsAction(client, streamIO) } };
+                { "View my visits",  new ViewVisitsAction(client, streamIO) },
+                { "Give prescription", new GivePrescriptionsAction(client, streamIO) } };
         }
 
         public override void PrintInstructions()

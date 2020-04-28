@@ -12,5 +12,10 @@ namespace Common
             VisitId = visitId;
             Medicines = medicines;
         }
+
+        public Prescription()
+        {
+
+        }
     }
 }

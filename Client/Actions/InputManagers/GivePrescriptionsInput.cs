@@ -15,7 +15,7 @@ namespace Client.Actions.InputManagers
 
         public GivePrescriptionsInput(MediClient client, IStreamIO streamIO) : base(client, streamIO)
         {
-            _options = GetOptions();
+            
         }
 
         public override void Init(InputParams inputParams)
@@ -23,6 +23,7 @@ namespace Client.Actions.InputManagers
             PrescriptionParams prescriptionParams = inputParams as PrescriptionParams;
             _visits = prescriptionParams.Visits;
             _allMedicines = prescriptionParams.Medicines;
+            _options = GetOptions();
         }
 
         public override void PrintInstructions()
@@ -43,7 +44,7 @@ namespace Client.Actions.InputManagers
             var options = new OrderedDictionary();
             foreach (VisitContent visit in _visits)
             {
-                string optionName = $"A visit with {visit.PersonName} at {visit.Visit.StartTime}";
+                string optionName = $"A visit with {visit.PersonName} at {visit.Visit.StartTime.ToLocalTime()}";
                 options.Add(optionName, visit.Visit);
             }
 
