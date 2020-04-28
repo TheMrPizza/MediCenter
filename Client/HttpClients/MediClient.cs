@@ -82,7 +82,7 @@ namespace Client.HttpClients
                 }
                 else if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    throw new RequestException("You have another visit at the requested time");
+                    throw new RequestException("Cannot order a visit at the requested time");
                 }
 
                 throw new RequestException("Cannot find a doctor for the visit");
