@@ -9,7 +9,7 @@ namespace Server.Services.Abstract
         T SignIn(string username, string password);
         bool Register(T person);
         bool ScheduleVisit(T person, Visit visit);
-        T Get(string username);
         List<Visit> GetVisits(string username);
+        T Get(string username);
     }
 }

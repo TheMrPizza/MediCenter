@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Server.Services.Abstract;
 using Common;
 
@@ -39,6 +40,25 @@ namespace Server.Controllers
             }
 
             return visit;
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult<Visit> GivePrescriptions(string id, List<Medicine> medicines)
+        {
+            Visit visit = _service.VisitsService.Get(id);
+            if (visit == null)
+            {
+                return NotFound();
+            }
+
+            Patient patient = _service.PatientsService.Get(visit.PatientUsername);
+            Visit updatedVisit = _service.VisitsService.AddPrescriptions(visit, patient, medicines);
+            if (updatedVisit == null)
+            {
+                return NotFound();
+            }
+
+            return updatedVisit;
         }
     }
 }

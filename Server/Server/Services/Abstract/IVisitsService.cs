@@ -5,8 +5,8 @@ namespace Server.Services.Abstract
 {
     public interface IVisitsService
     {
-        Visit GetVisit(string id);
         bool Schedule(Visit visit);
         Visit AddPrescriptions(Visit visit, Patient patient, List<Medicine> medicines);
+        Visit Get(string id);
     }
 }
