@@ -35,7 +35,7 @@ namespace Client.Actions
                 _client.User = await content.SignIn();
                 return true;
             }
-            catch (RequestException e)
+            catch (MediCenterException e)
             {
                 _streamIO.ErrorElement.Interact(e);
                 return false;

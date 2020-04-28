@@ -29,7 +29,7 @@ namespace Client.Actions
             {
                 await _client.Register(patient, "patients");
             }
-            catch (RequestException e)
+            catch (MediCenterException e)
             {
                 _streamIO.ErrorElement.Interact(e);
             }

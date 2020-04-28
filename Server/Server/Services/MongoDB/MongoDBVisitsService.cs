@@ -1,4 +1,6 @@
-﻿using MongoDB.Driver;
+﻿using System.Collections.Generic;
+using System.Linq;
+using MongoDB.Driver;
 using Server.Services.Abstract;
 using Server.Config;
 using Common;
@@ -9,17 +11,10 @@ namespace Server.Services.MongoDB
     {
         private readonly IMongoCollection<Visit> _visits;
 
-        public MongoDBVisitsService(IDBSettings settings)
+        public MongoDBVisitsService(MongoClient client, IDBSettings settings)
         {
-            var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
-
             _visits = database.GetCollection<Visit>(settings.CollectionsNames["Visits"]);
-        }
-
-        public Visit GetVisit(string id)
-        {
-            return _visits.Find(visit => visit.Id == id).FirstOrDefault();
         }
 
         public bool Schedule(Visit visit)
@@ -33,6 +28,44 @@ namespace Server.Services.MongoDB
             {
                 return false;
             }
+        }
+
+        public Visit AddPrescription(Visit visit, Patient patient, List<Medicine> medicines)
+        {
+            List<string> safetyMedicines = medicines.Where(med => CheckMedicineForPatience(patient, med))
+                .Select(med => med.Id).ToList();
+
+            try
+            {
+                visit.MedicinesId = safetyMedicines;
+                var update = Builders<Visit>.Update.AddToSetEach(vis => vis.MedicinesId, safetyMedicines);
+                Update(visit.Id, update);
+                return visit;
+            }
+            catch (MongoWriteException)
+            {
+                return null;
+            }
+        }
+
+        public Visit Get(string id)
+        {
+            return _visits.Find(visit => visit.Id == id).FirstOrDefault();
+        }
+
+        private void Update(string id, UpdateDefinition<Visit> update)
+        {
+            _visits.UpdateOne(visit => visit.Id == id, update, new UpdateOptions { IsUpsert = true });
+        }
+
+        private bool CheckMedicineForPatience(Patient patient, Medicine medicine)
+        {
+            if (patient == null)
+            {
+                return false;
+            }
+
+            return !medicine.Reactions.Any(disease => patient.Diseases.Contains(disease));
         }
     }
 }

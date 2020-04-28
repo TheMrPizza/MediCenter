@@ -82,10 +82,29 @@ namespace Client.HttpClients
                 }
                 else if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    throw new RequestException("You have another visit at the requested time");
+                    throw new RequestException("Cannot order a visit at the requested time");
                 }
 
                 throw new RequestException("Cannot find a doctor for the visit");
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
+        public async Task<Visit> GivePrescription(Prescription prescription)
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.PutAsync
+                    ("visits/" + prescription.VisitId, Serializer.Serialize(prescription));
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<Visit>(response);
+                }
+
+                throw new RequestException("Cannot find visit");
             }
             catch (HttpRequestException)
             {
@@ -106,6 +125,42 @@ namespace Client.HttpClients
                 }
 
                 throw new RequestException("Cannot find visits");
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
+        public async Task<List<Medicine>> GetAllMedicines()
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync("medicines");
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<List<Medicine>>(response);
+                }
+
+                throw new RequestException("Unknown server problem");
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
+        public async Task<Medicine> GetMedicine(string id)
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync("medicines/" + id);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<Medicine>(response);
+                }
+
+                throw new RequestException("Cannot find medicine");
             }
             catch (HttpRequestException)
             {

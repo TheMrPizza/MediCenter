@@ -17,7 +17,7 @@ namespace Common
         public string DoctorUsername { get; set; }
 
         [BsonElement("Medicines")]
-        public List<Medicine> Medicines { get; set; }
+        public List<string> MedicinesId { get; set; }
 
         [BsonElement("Speciality")]
         public Speciality Speciality { get; set; }
@@ -32,7 +32,7 @@ namespace Common
         {
             Id = Guid.NewGuid().ToString();
             PatientUsername = patientUsername;
-            Medicines = new List<Medicine>();
+            MedicinesId = new List<string>();
             Speciality = speciality;
             StartTime = startTime.ToUniversalTime();
             EndTime = endTime.ToUniversalTime();

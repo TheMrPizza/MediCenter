@@ -1,4 +1,5 @@
-﻿using Client.HttpClients;
+﻿using System.Linq;
+using Client.HttpClients;
 using Client.IO.Abstract;
 using Common;
 
@@ -22,6 +23,11 @@ namespace Client.Actions.OutputManagers
             StreamIO.TextElement.Interact(GetOutput());
             StreamIO.TextElement.Interact($"   From {Value.Visit.StartTime.ToLocalTime()} " +
                                             $"to {Value.Visit.EndTime.ToLocalTime()}");
+            if (value.Medicines.Count > 0)
+            {
+                string medicinesName = string.Join(", ", Value.Medicines.Select(med => med.Name));
+                StreamIO.TextElement.Interact($"   Given medicines: {medicinesName}");
+            }
         }
 
         private string GetOutput()

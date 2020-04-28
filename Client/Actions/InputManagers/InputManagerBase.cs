@@ -14,6 +14,11 @@ namespace Client.Actions.InputManagers
             _streamIO = streamIO;
         }
 
+        public virtual void Init(InputParams inputParams)
+        {
+
+        }
+
         public virtual void PrintInstructions()
         {
 

@@ -24,7 +24,7 @@ namespace Client.Actions
             {
                 string doctorName = await _client.GetName(scheduledvisit.DoctorUsername, "doctors");
                 _streamIO.TextElement.Interact($"A visit with Dr. {doctorName} " +
-                                               $"has been scheduled for {scheduledvisit.StartTime}");
+                                               $"has been scheduled for {scheduledvisit.StartTime.ToLocalTime()}");
             }
 
             return new PatientMainMenuAction(_client, _streamIO);
@@ -36,7 +36,7 @@ namespace Client.Actions
             {
                 return await _client.ScheduleVisit(visit);
             }
-            catch (RequestException e)
+            catch (MediCenterException e)
             {
                 _streamIO.ErrorElement.Interact(e);
                 return null;

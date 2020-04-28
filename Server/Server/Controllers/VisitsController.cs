@@ -40,5 +40,24 @@ namespace Server.Controllers
 
             return visit;
         }
+
+        [HttpPut("{id}")]
+        public ActionResult<Visit> AddPrescription(Prescription prescription)
+        {
+            Visit visit = _service.VisitsService.Get(prescription.VisitId);
+            if (visit == null)
+            {
+                return NotFound();
+            }
+
+            Patient patient = _service.PatientsService.Get(visit.PatientUsername);
+            Visit updatedVisit = _service.VisitsService.AddPrescription(visit, patient, prescription.Medicines);
+            if (updatedVisit == null)
+            {
+                return NotFound();
+            }
+
+            return updatedVisit;
+        }
     }
 }

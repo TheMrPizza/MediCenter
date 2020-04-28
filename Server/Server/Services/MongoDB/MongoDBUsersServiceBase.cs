@@ -58,11 +58,6 @@ namespace Server.Services.MongoDB
             }
         }
 
-        public T Get(string username)
-        {
-            return _collection.Find(per => per.Username == username).FirstOrDefault();
-        }
-
         public List<Visit> GetVisits(string username)
         {
             var visits = _collection.Aggregate().Match(per => per.Username == username)
@@ -73,6 +68,11 @@ namespace Server.Services.MongoDB
 
             return BsonSerializer.Deserialize<PersonVisits>(visits.ToBsonDocument())
                 .Visits.OrderBy(visit => visit.StartTime).Take(5).ToList();
+        }
+
+        public T Get(string username)
+        {
+            return _collection.Find(per => per.Username == username).FirstOrDefault();
         }
 
         protected void Update(string username, UpdateDefinition<T> update)
