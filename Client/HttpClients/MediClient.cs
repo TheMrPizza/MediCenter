@@ -150,6 +150,24 @@ namespace Client.HttpClients
             }
         }
 
+        public async Task<Medicine> GetMedicine(string id)
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync("medicines/" + id);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await Serializer.Deserialize<Medicine>(response);
+                }
+
+                throw new RequestException("Cannot find medicine");
+            }
+            catch (HttpRequestException)
+            {
+                throw new ConnectionException("Cannot connect to server");
+            }
+        }
+
         public async Task<string> GetName(string username, string type)
         {
             try

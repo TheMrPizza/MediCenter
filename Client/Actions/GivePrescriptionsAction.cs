@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Linq;
 using Client.Actions.InputManagers;
-using Client.Actions.OutputManagers;
 using Client.HttpClients;
 using Client.IO.Abstract;
 using Client.Exceptions;

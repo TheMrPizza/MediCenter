@@ -32,7 +32,8 @@ namespace Client.Actions
             for (int i = 0; i < visits.Count; i++)
             {
                 string personName = await GetName(visits[i]);
-                VisitContent content = new VisitContent(visits[i], personName, i + 1);
+                List<Medicine> medicines = await GetMedicines(visits[i]);
+                VisitContent content = new VisitContent(visits[i], personName, medicines, i + 1);
                 OutputManager.PrintOutput(content);
             }
         }
@@ -44,6 +45,25 @@ namespace Client.Actions
                 return await _client.GetVisits();
             }
             catch (RequestException e)
+            {
+                _streamIO.ErrorElement.Interact(e);
+                return null;
+            }
+        }
+
+        private async Task<List<Medicine>> GetMedicines(Visit visit)
+        {
+            try
+            {
+                var medicines = new List<Medicine>();
+                foreach (string medId in visit.MedicinesId)
+                {
+                    medicines.Add(await _client.GetMedicine(medId));
+                }
+
+                return medicines;
+            }
+            catch (MediCenterException e)
             {
                 _streamIO.ErrorElement.Interact(e);
                 return null;

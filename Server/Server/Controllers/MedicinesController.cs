@@ -17,9 +17,21 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        public List<Medicine> GetAll()
+        public ActionResult<List<Medicine>> GetAll()
         {
             return _service.MedicinesService.GetAll();
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<Medicine> Get(string id)
+        {
+            Medicine medicine = _service.MedicinesService.Get(id);
+            if (medicine == null)
+            {
+                return NotFound();
+            }
+
+            return medicine;
         }
     }
 }

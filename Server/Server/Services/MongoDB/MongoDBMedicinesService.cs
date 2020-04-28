@@ -21,5 +21,10 @@ namespace Server.Services.MongoDB
         {
             return _medicines.Find(med => true).ToList();
         }
+
+        public Medicine Get(string id)
+        {
+            return _medicines.Find(med => med.Id == id).FirstOrDefault();
+        }
     }
 }
