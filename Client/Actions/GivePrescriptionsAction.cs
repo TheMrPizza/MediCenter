@@ -17,9 +17,14 @@ namespace Client.Actions
 
         }
 
-        public override Task<ActionBase> Run()
+        public async override Task<ActionBase> Run()
         {
-            throw new NotImplementedException();
+            List<Visit> visits = await GetVisits();
+            if (visits != null)
+            {
+                Visit visit = InputManager.GetInput();
+
+            }
         }
 
         private async Task<List<Visit>> GetVisits()

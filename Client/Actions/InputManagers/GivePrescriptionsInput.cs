@@ -27,6 +27,7 @@ namespace Client.Actions.InputManagers
         public override Prescription GetInput()
         {
             Visit visit = _streamIO.ListElement.Interact(_options) as Visit;
+
         }
 
         private OrderedDictionary GetOptions()

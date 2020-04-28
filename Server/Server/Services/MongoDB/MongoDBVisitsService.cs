@@ -11,11 +11,9 @@ namespace Server.Services.MongoDB
     {
         private readonly IMongoCollection<Visit> _visits;
 
-        public MongoDBVisitsService(IDBSettings settings)
+        public MongoDBVisitsService(MongoClient client, IDBSettings settings)
         {
-            var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
-
             _visits = database.GetCollection<Visit>(settings.CollectionsNames["Visits"]);
         }
 

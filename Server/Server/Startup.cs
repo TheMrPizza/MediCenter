@@ -39,6 +39,7 @@ namespace Server
                 new MongoClient(mc.GetRequiredService<IOptions<MongoDBSettings>>().Value.ConnectionString));
             services.AddScoped<IDoctorsService, MongoDBDoctorsService>();
             services.AddScoped<IPatientsService, MongoDBPatientsService>();
+            services.AddScoped<IMedicinesService, MongoDBMedicinesService>();
             services.AddScoped<IVisitsService, MongoDBVisitsService>();
             services.AddScoped<IDBService, MongoDBService>();
             services.AddControllers();
